@@ -1,0 +1,7 @@
+.vs
+obj/
+bin/
+Assembly-CSharp.dll
+*.sln
+DesignGeneration/input/*.*
+Directory.Build.props

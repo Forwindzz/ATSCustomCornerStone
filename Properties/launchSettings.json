@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Start Steam": {
+      "commandName": "Executable",
+      "executablePath": "$(SteamPath)",
+      "commandLineArgs": "-applaunch 1336490 --doorstop-enable true --doorstop-target \"$(BepInExPath)/BepInEx/core/BepInEx.Preloader.dll\"",
+      "nativeDebugging": false
+    },
+    "Direct Start": {
+      "commandName": "Executable",
+      "executablePath": "$(StormPath)/Against the Storm.exe",
+      "commandLineArgs": "-applaunch 1336490 --doorstop-enable true --doorstop-target \"$(BepInExPath)/BepInEx/core/BepInEx.Preloader.dll\""
+    }
+  }
+}

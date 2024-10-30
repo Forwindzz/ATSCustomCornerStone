@@ -1,0 +1,382 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>ForwindzCustomPerksMod</AssemblyName>
+    <Description>My First Mod for Against The Storm - by Forwindz</Description>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+  <DebugType>Full</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.15" IncludeAssets="compile" />	  	
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+    <Reference Include="$(StormPath)/Against the Storm_Data/Managed/Assembly-CSharp.dll" Publicize="true" />
+    <Reference Include="API">
+      <HintPath>$(BepInExPath)\BepInEx\plugins\ATS_API_Devs-API\API.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(StormPath)\Against the Storm_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+		<Reference Include="Sirenix.OdinInspector.Attributes">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Sirenix.OdinInspector.Attributes.dll</HintPath>
+		</Reference>
+		<Reference Include="Sirenix.Serialization">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Sirenix.Serialization.dll</HintPath>
+		</Reference>
+		<Reference Include="Sirenix.Serialization.Config">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Sirenix.Serialization.Config.dll</HintPath>
+		</Reference>
+		<Reference Include="Sirenix.Utilities">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Sirenix.Utilities.dll</HintPath>
+		</Reference>
+		<Reference Include="UniRx">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UniRx.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UniTask.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask.Addressables">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UniTask.Addressables.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask.DOTween">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UniTask.DOTween.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask.Linq">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UniTask.Linq.dll</HintPath>
+		</Reference>
+		<Reference Include="UniTask.TextMeshPro">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UniTask.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Addressables">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Addressables.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Burst">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Burst.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Burst.Unsafe">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Burst.Unsafe.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Collections">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Collections.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Collections.LowLevel.ILSupport">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Formats.Fbx.Runtime">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Formats.Fbx.Runtime.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.InputSystem">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.InputSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.InputSystem.ForUI">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.InputSystem.ForUI.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Jobs">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Jobs.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Mathematics">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Mathematics.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.ProGrids">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.ProGrids.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Recorder">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Recorder.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Recorder.Base">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Recorder.Base.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.RenderPipelines.Core.Runtime">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.RenderPipelines.Universal.Runtime">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.RenderPipelines.Universal.Shaders">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.ResourceManager">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.ResourceManager.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.ScriptableBuildPipeline">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.ScriptableBuildPipeline.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Splines">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Splines.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.TextMeshPro">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Timeline">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.Timeline.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.VisualEffectGraph.Runtime">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\Unity.VisualEffectGraph.Runtime.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AccessibilityModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.AccessibilityModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AIModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AndroidJNIModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.AndroidJNIModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AnimationModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ARModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ARModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AssetBundleModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AudioModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ClothModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ClothModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ClusterInputModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ClusterInputModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ClusterRendererModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ClusterRendererModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CrashReportingModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.CrashReportingModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.DirectorModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.DirectorModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.DSPGraphModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.DSPGraphModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.GameCenterModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.GameCenterModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.GIModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.GIModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.GridModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.GridModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.HotReloadModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.HotReloadModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ImageConversionModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.IMGUIModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.InputLegacyModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.InputModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.InputModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.JSONSerializeModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.LocalizationModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.LocalizationModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.NVIDIAModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.NVIDIAModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ParticleSystemModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.PerformanceReportingModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.Physics2DModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.PhysicsModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ProfilerModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ProfilerModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ScreenCaptureModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.SharedInternalsModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.SpriteMaskModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.SpriteMaskModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.SpriteShapeModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.SpriteShapeModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.StreamingModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.StreamingModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.SubstanceModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.SubstanceModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.SubsystemsModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.SubsystemsModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.TerrainModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.TerrainModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.TerrainPhysicsModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.TextCoreFontEngineModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.TextCoreTextEngineModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.TextRenderingModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.TilemapModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.TilemapModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.TLSModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.TLSModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UI">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UI.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UIElementsModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UIElementsNativeModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UIElementsNativeModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UIModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UmbraModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UmbraModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UNETModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UNETModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityAnalyticsCommonModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityAnalyticsCommonModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityAnalyticsModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityConnectModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityConnectModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityCurlModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityCurlModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityTestProtocolModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityWebRequestAudioModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityWebRequestModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityWebRequestTextureModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UnityWebRequestWWWModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.VehiclesModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.VehiclesModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.VFXModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.VFXModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.VideoModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.VideoModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.VirtualTexturingModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.VirtualTexturingModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.VRModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.WindModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.WindModule.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.XRModule">
+		  <HintPath>$(StormPath)\Against the Storm_Data\Managed\UnityEngine.XRModule.dll</HintPath>
+		</Reference>
+		
+	</ItemGroup>
+  
+  <ItemGroup>
+    <None Include="assets\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ModPackageInfo\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="DesignGeneration\" />
+  </ItemGroup>    
+
+  <Target Name="Deploy" AfterTargets="Build">
+		<ItemGroup>
+			<Assembly Include="$(OutputPath)\$(AssemblyName).dll" />
+      <Assets Include="$(OutputPath)\assets\**\*.*" />
+      <MetaFile Include="$(OutputPath)\ModPackageInfo\*.*" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\" />
+    <Copy SourceFiles="@(Assets)" DestinationFiles="@(Assets->'$(BepInExPath)\BepInEx\plugins\assets\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+    <Copy SourceFiles="@(MetaFile)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\" />
+	  
+  </Target>
+</Project>
