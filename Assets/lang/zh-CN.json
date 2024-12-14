@@ -1,4 +1,22 @@
 {
     "Forwindz.CustomCornerstones_SaladRecipe_displayName": "\u6c99\u62c9\u98df\u8c31",
-    "Forwindz.CustomCornerstones_SaladRecipe_description": "\u6751\u6c11\u66f4\u52a0\u4eab\u53d7\u65b0\u9c9c\u539f\u59cb\u7684\u5473\u9053\u3002<sprite name=\"[food raw] herbs\"><sprite name=\"[food raw] grain\"><sprite name=\"[mat raw] algae\">\u53ef\u4ee5\u76f4\u63a5\u98df\u7528"
+    "Forwindz.CustomCornerstones_SaladRecipe_description": "\u6751\u6c11\u66f4\u52a0\u4eab\u53d7\u65b0\u9c9c\u539f\u59cb\u7684\u5473\u9053\u3002<sprite name=\"[food raw] herbs\"><sprite name=\"[food raw] grain\"><sprite name=\"[mat raw] algae\">\u53ef\u4ee5\u76f4\u63a5\u98df\u7528",
+    "Forwindz.CustomCornerstones_FoolhardyGambler_displayName": "\u76f2\u76ee\u7684\u8d4c\u5f92",
+    "Forwindz.CustomCornerstones_FoolhardyGambler_description": "\u63a5\u4e0b\u6765\u5230\u8fbe\u7684\u5546\u4eba\u6c38\u8fdc\u53ea\u4f1a\u662f{0}\u3002\u5546\u4eba\u5230\u8fbe\u901f\u5ea6{1}\u3002{0}\u51fa\u552e\u7684\u6bcf\u4e2a\u57fa\u77f3\u6216\u84dd\u56fe\u6709{2}\u6982\u7387\u514d\u8d39\u3002",
+    "Forwindz.CustomCornerstones_GardenDesign_displayName": "\u56ed\u6797\u666f\u89c2\u8bbe\u8ba1",
+    "Forwindz.CustomCornerstones_GardenDesign_description": "\u706b\u5858\u5347\u7ea7\u9700\u8981\u4eba\u6570\u51cf\u5c11{0}\uff0c\u6240\u6709\u88c5\u9970\u5efa\u7b51\u7684\u88c5\u9970\u6548\u679c{1}\u3002\u4f46\u6751\u6c11\u7684\u4f11\u606f\u65f6\u95f4\u589e\u52a0{2}\u3002",
+    "Forwindz.CustomCornerstones_UsabilityDesign_displayName": "\u53ef\u7528\u6027\u8bbe\u8ba1",
+    "Forwindz.CustomCornerstones_UsabilityDesign_description": "\u6bcf\u70b9\u548c\u8c10\uff0c\u7f8e\u89c2\uff0c\u8212\u9002\u88c5\u9970\u5c06\u5206\u522b\u63d0\u4f9b{0}\u53cc\u500d\u751f\u4ea7\u6982\u7387\uff0c\u79fb\u52a8\u901f\u5ea6\uff0c\u6536\u83b7\u901f\u5ea6\u3002",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_displayName": "\u53ef\u7528\u6027\u8bbe\u8ba1 - \u8212\u9002",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_description": "\u6bcf\u70b9\u8212\u9002\u88c5\u9970\u5c06\u5206\u522b\u63d0\u4f9b{0}\u6536\u83b7\u901f\u5ea6\u3002",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_preview": "\u83b7\u5f97\uff1a{0}\u6536\u83b7\u901f\u5ea6",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_retroactive": "\u9884\u671f\uff1a{0}\u6536\u83b7\u901f\u5ea6",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_displayName": "\u53ef\u7528\u6027\u8bbe\u8ba1 - \u7f8e\u89c2",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_description": "\u6bcf\u70b9\u7f8e\u89c2\u88c5\u9970\u5c06\u5206\u522b\u63d0\u4f9b{0}\u79fb\u52a8\u901f\u5ea6\u3002",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_preview": "\u83b7\u5f97\uff1a{0}\u79fb\u52a8\u901f\u5ea6",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_retroactive": "\u9884\u671f\uff1a{0}\u79fb\u52a8\u901f\u5ea6",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_displayName": "\u53ef\u7528\u6027\u8bbe\u8ba1 - \u548c\u8c10",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_description": "\u6bcf\u70b9\u548c\u8c10\u88c5\u9970\u5c06\u5206\u522b\u63d0\u4f9b{0}\u53cc\u500d\u751f\u4ea7\u6982\u7387\u3002",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_preview": "\u83b7\u5f97\uff1a{0}\u53cc\u500d\u751f\u4ea7\u6982\u7387",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_retroactive": "\u9884\u671f\uff1a{0}\u53cc\u500d\u751f\u4ea7\u6982\u7387"
 }

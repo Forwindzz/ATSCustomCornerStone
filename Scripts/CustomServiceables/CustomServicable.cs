@@ -5,6 +5,7 @@ using UniRx;
 
 namespace Forwindz.Content.CustomServiceables
 {
+    /*
     public static class CustomServicable
     {
         public static int buildingsCompleted = 0;
@@ -37,4 +38,5 @@ namespace Forwindz.Content.CustomServiceables
             buildingConstructionFinishedSubject.OnNext(building);
         }
     }
+    */
 }

@@ -364,6 +364,7 @@
   
   <ItemGroup>
     <Folder Include="DesignGeneration\" />
+    <Folder Include="Scripts\CustomHooks\" />
   </ItemGroup>    
 
   <Target Name="Deploy" AfterTargets="Build">

@@ -1,17 +1,26 @@
 ﻿using Eremite.Buildings;
 using Eremite.Controller.Effects;
 using Eremite.Model.Effects;
-using Forwindz.Content.CustomServiceables;
+using Forwindz.Framework.Services;
+using Forwindz.Scripts.Framework.Services;
 using System;
 using UniRx;
 
-namespace Forwindz.Content.CustomHooks
+namespace Forwindz.Framework.Hooks
 {
     public class BuildingCompletedMonitor : HookMonitor<BuildingCompletedHook, BuildingCompletedTracker>
     {
+        static BuildingCompletedMonitor()
+        {
+            CustomHookedEffectsController.Register<BuildingCompletedMonitor>(BuildingCompletedHook.EnumBuildingComplete);
+        }
+
         public override void AddHandle(BuildingCompletedTracker tracker)
         {
-            tracker.handle.Add(CustomServicable.OnBuildingConstructionFinished.Subscribe(new Action<Building>(tracker.Update)));
+            tracker.handle.Add(
+                CustomServiceManager.GetService<BuildingMonitorService>()
+                .OnBuildingConstructionFinished.Subscribe(
+                    new Action<Building>(tracker.Update)));
         }
 
         public override BuildingCompletedTracker CreateTracker(HookState state, BuildingCompletedHook model, HookedEffectModel effectModel, HookedEffectState effectState)
@@ -21,33 +30,34 @@ namespace Forwindz.Content.CustomHooks
 
         public override void InitValue(BuildingCompletedTracker tracker)
         {
-            tracker.SetAmount(this.GetInitValueFor(tracker.model));
+            tracker.SetAmount(GetInitValueFor(tracker.model));
         }
-        
+
         public override int GetInitValueFor(BuildingCompletedHook model)
         {
-            int countedBuildings = CustomServicable.buildingsCompleted;
+            var service = CustomServiceManager.GetService<BuildingMonitorService>();
+            int countedBuildings = service.state.buildingsCompleted;
             if (model.ignoreDecorationBuildings)
             {
-                countedBuildings -= CustomServicable.decorationBuildingsCompleted;
+                countedBuildings -= service.state.decorationBuildingsCompleted;
             }
 
             if (model.ignoreRoads)
             {
-                countedBuildings -= CustomServicable.roadsCompleted;
+                countedBuildings -= service.state.roadsCompleted;
             }
 
             return countedBuildings;
         }
-        
+
         public override int GetInitProgressFor(BuildingCompletedHook model)
         {
-            return this.GetInitValueFor(model) % model.amount;
+            return GetInitValueFor(model) % model.amount;
         }
-        
+
         public override int GetFiredAmountPreviewFor(BuildingCompletedHook model)
         {
-            return this.GetInitValueFor(model) / model.amount;
+            return GetInitValueFor(model) / model.amount;
         }
     }
 }

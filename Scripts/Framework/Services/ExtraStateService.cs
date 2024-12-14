@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Eremite;
 using Eremite.Services;
 using Forwindz.Framework.Utils;
 using HarmonyLib;
@@ -151,6 +152,12 @@ namespace Forwindz.Framework.Services
 
         public async UniTask LoadAllStates()
         {
+            if(MB.GameSaveService.IsNewGame())
+            {
+                FLog.Info("ExtraStateService: New Game, do not load!");
+                saveInformations = SaveInformations.CreateNew();
+                return;
+            }
             string fullFilePath = Path.Combine(Serviceable.ProfilesService.GetProfileFolderPath(), SAVE_PATH);
             if(!File.Exists(fullFilePath))
             {

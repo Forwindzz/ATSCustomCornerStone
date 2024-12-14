@@ -1,9 +1,8 @@
 ﻿using Cysharp.Threading.Tasks;
-using Eremite;
 using Eremite.Model;
 using Eremite.Services;
-using Forwindz.Framework.Extend;
 using Forwindz.Framework.Utils;
+using Forwindz.Framework.Utils.Extend;
 using HarmonyLib;
 using Newtonsoft.Json;
 using System;

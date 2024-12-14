@@ -54,6 +54,12 @@ namespace Forwindz.Framework.Utils
             logger.LogError(obj);
         }
 
+        public static void ErrorAndThrow(object obj)
+        {
+            logger.LogError(obj);
+            throw new Exception("Throw Exception:" + obj.ToString());
+        }
+
         public static void Fatal(params object[] objs)
         {
             logger.LogFatal(objs);
@@ -62,6 +68,12 @@ namespace Forwindz.Framework.Utils
         public static void Fatal(object obj)
         {
             logger.LogFatal(obj);
+        }
+
+        public static void FatalAndThrow(object obj)
+        {
+            logger.LogFatal(obj);
+            throw new Exception("Throw Exception:" + obj.ToString());
         }
 
         public static void Message(params object[] objs)

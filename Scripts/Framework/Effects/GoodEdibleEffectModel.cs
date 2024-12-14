@@ -2,6 +2,7 @@
 using Eremite.Buildings;
 using Eremite.Model;
 using Eremite.Model.Effects;
+using Eremite.Services;
 using Forwindz.Framework.Services;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,11 @@ namespace Forwindz.Framework.Effects
     /// ediable + not ediable = no effect (keep the original eatable attribue)
     /// ediable + not ediable*2 = not ediable (not ediable is more than ediable)
     /// ediable*2 + not ediable = ediable (ediable is more than not ediable)
+    /// 
     /// </summary>
     public class GoodEdibleEffectModel : EffectModel
     {
+        //TODO: maybe deal with text?
         public GoodModel good;
         public bool eatable;
 
@@ -26,8 +29,9 @@ namespace Forwindz.Framework.Effects
 
         public override string GetAmountText()
         {
-            return string.Empty;
+            return $"<sprite name=\"{good.Name}\">";
         }
+
 
         public override Sprite GetDefaultIcon()
         {
@@ -36,7 +40,7 @@ namespace Forwindz.Framework.Effects
 
         public override Color GetTypeColor()
         {
-            return Settings.RewardColorRawProduction;
+            return Settings.RewardColorRawGood;
         }
 
         public override bool HasImpactOn(BuildingModel building)

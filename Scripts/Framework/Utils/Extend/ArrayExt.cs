@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Forwindz.Framework.Extend
+namespace Forwindz.Framework.Utils.Extend
 {
     /// <summary>
     /// Operate Array like List

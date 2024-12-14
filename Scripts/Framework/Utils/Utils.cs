@@ -67,16 +67,5 @@ namespace Forwindz.Framework.Utils
             return $"<sprite name=\"{good.Name.ToLowerInvariant()}\"> {goodName}";
         }
 
-        public static bool IsDecorationBuilding(Building building)
-        {
-            string buildingCategory = building.BuildingModel.category.name;
-            return buildingCategory.Equals("Decorations");
-        }
-
-        public static bool IsRoad(Building building)
-        {
-            string buildingCategory = building.BuildingModel.category.name;
-            return buildingCategory.Equals("Roads");
-        }
     }
 }

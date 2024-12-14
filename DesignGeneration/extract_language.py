@@ -5,7 +5,7 @@ mod_id = "Forwindz.CustomCornerstones"
 
 
 
-workbook = openpyxl.load_workbook('./input/⑨の自定义基石表_mod.xlsx')
+workbook = openpyxl.load_workbook('./input/⑨の自定义基石表_mod.xlsx',read_only=True,data_only=True)
 sheet = workbook['基石-语言文件信息'] 
 
 

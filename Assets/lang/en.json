@@ -1,4 +1,22 @@
 {
     "Forwindz.CustomCornerstones_SaladRecipe_displayName": "Salad recipe",
-    "Forwindz.CustomCornerstones_SaladRecipe_description": "Villagers enjoy the fresh and original taste more. <sprite name=\"[food raw] herbs\"><sprite name=\"[food raw] grain\"><sprite name=\"[mat raw] algae\"> are ediable now."
+    "Forwindz.CustomCornerstones_SaladRecipe_description": "Villagers enjoy the fresh and original taste more. <sprite name=\"[food raw] herbs\"><sprite name=\"[food raw] grain\"><sprite name=\"[mat raw] algae\"> are ediable now.",
+    "Forwindz.CustomCornerstones_FoolhardyGambler_displayName": "Foolhardy Gambler",
+    "Forwindz.CustomCornerstones_FoolhardyGambler_description": "Only {0} will arrive to your settlement now, and arrive {1} quicker. Each perk or blueprint sold by {0} has {2} chance to become free",
+    "Forwindz.CustomCornerstones_GardenDesign_displayName": "Garden Design",
+    "Forwindz.CustomCornerstones_GardenDesign_description": "Reduce {0} required villagers for upgrading hearths, all decorative buildings provide extra {1} decoration point. However, the villagers' rest time {2}.",
+    "Forwindz.CustomCornerstones_UsabilityDesign_displayName": "Usability Design",
+    "Forwindz.CustomCornerstones_UsabilityDesign_description": "Each point of Harmony, Aesthetics, and Comfort decoration will provide {0} double production chance, movement speed, and harvest speed respectively.",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_displayName": "Usability Design - Comfort",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_description": "Each point of Comfort decoration will provide {0} harvest speed.",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_preview": "Gained: {0} harvest speed",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_retroactive": "Expect: {0} harvest speed",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_displayName": "Usability Design - Aesthetics",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_description": "Each point of Aesthetics decoration will provide {0} movement speed.",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_preview": "Gained: {0} movement speed",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Aesthetics_retroactive": "Expect: {0} movement speed",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_displayName": "Usability Design - Harmony",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_description": "Each point of Harmony decoration will provide {0} double production chance.",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_preview": "Gained: {0} double production chance",
+    "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_retroactive": "Expect: {0} double production chance"
 }

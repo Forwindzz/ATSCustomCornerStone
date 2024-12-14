@@ -1,18 +1,18 @@
 ﻿using ATS_API.Effects;
-using ATS_API.Goods;
 using ATS_API.Helpers;
 using ATS_API.Localization;
-using ATS_API.Needs;
 using Eremite;
 using Eremite.Model;
 using Eremite.Model.Effects;
 using Eremite.Model.Effects.Hooked;
-using Eremite.Services;
-using Forwindz.Content.CustomHooks;
-using Forwindz.Framework.Extend;
 using System;
 using Forwindz.Framework.Utils;
 using TextArgType = Eremite.Model.Effects.Hooked.TextArgType;
+using HarmonyLib;
+using Forwindz.Framework.Hooks;
+using static Eremite.Model.Effects.HookedStateTextArg;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Forwindz.Content
 {
@@ -20,329 +20,337 @@ namespace Forwindz.Content
     internal class CustomCornerstones
     {
 
-        private static HookedEffectBuilder CreateBase(
+        static CustomCornerstones()
+        {
+            PatchesManager.RegPatch<CustomCornerstones>();
+        }
+
+        public static void CreateNewCornerstones()
+        {
+            UnityEngine.Debug.Log("Starting to creating custom cornerstones");
+            CreateForwindzCornerStones();
+            UnityEngine.Debug.Log("All custom cornerstones created successfully!");
+        }
+
+        private static HookedEffectBuilder CreateBaseHookEffect(
             string cornerstoneName, 
             string cornerstoneIconPath,
             EffectRarity rarity,
-            bool isPositive=true)
+            bool isPositive=true,
+            bool addAsCornerStone = true)
         {
             HookedEffectBuilder builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
             builder.SetPositive(isPositive);
             builder.SetRarity(rarity);
-            builder.SetObtainedAsCornerstone();
+            if(addAsCornerStone)
+            {
+                builder.SetObtainedAsCornerstone();
+            }
             builder.SetAvailableInAllBiomesAndSeasons();
-            builder.SetLabel("Mod by Forwindz");
-            builder.SetLabel("Mod");
+            builder.SetLabel("Mod - Forwindz");
             builder.SetDescriptionKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_description");
             builder.SetDisplayNameKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_displayName");
             return builder;
         }
 
+        private static CompositeEffectBuilder CreateBaseCompositeEffect(
+            string cornerstoneName,
+            string cornerstoneIconPath,
+            EffectRarity rarity,
+            bool isPositive = true)
+        {
+            CompositeEffectBuilder builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
+            builder.SetPositive(isPositive);
+            builder.SetRarity(rarity);
+            builder.SetObtainedAsCornerstone();
+            builder.SetAvailableInAllBiomesAndSeasons();
+            builder.SetLabel("Mod - Forwindz");
+            builder.SetDescriptionKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_description");
+            builder.SetDisplayNameKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_displayName");
+            return builder;
+        }
+
+        private static HookedEffectBuilder HookedEffectAddPreviewKey(HookedEffectBuilder builder)
+        {
+            builder.SetPreviewDescriptionKey($"{PluginInfo.PLUGIN_GUID}_{builder.Name}_preview");
+            return builder;
+        }
+
+        private static HookedEffectBuilder HookedEffectAddRetroactiveKey(HookedEffectBuilder builder)
+        {
+            builder.SetRetroactiveDescriptionKey($"{PluginInfo.PLUGIN_GUID}_{builder.Name}_retroactive");
+            return builder;
+        }
+
         private static void CreateForwindzCornerStones()
         {
-
             CreateSaladRecipe();
+            CreateFoolhardyGambler();
+            CreateGardenDesign();
+            CreateUsabilityDesign();
         }
 
         private static void CreateSaladRecipe()
         {
-            HookedEffectBuilder builder = CreateBase(
+            HookedEffectBuilder builder = CreateBaseHookEffect(
                 "SaladRecipe",
-                "KiwiFruit.png",//TODO: change it!
+                "SaladRecipe.jpeg",
                 EffectRarity.Epic
                 );
             builder.SetDrawLimit(1);
             //builder.AddInstantEffect(EffectFactoryExtend.AddHookedEffect_ChanceForNoConsumptionEffectModel(builder,0.15f));
             builder.AddInstantEffect(EffectFactoryExtend.AddHookedEffect_GoodEdibleEffectModel(
-                builder, GoodModelExt.GetGoodModel(GoodsTypes.Food_Raw_Herbs), true));
+                builder, GoodsTypes.Food_Raw_Herbs.ToGoodModel(), true));
             builder.AddInstantEffect(EffectFactoryExtend.AddHookedEffect_GoodEdibleEffectModel(
-                builder, GoodModelExt.GetGoodModel(GoodsTypes.Food_Raw_Grain), true));
+                builder, GoodsTypes.Food_Raw_Grain.ToGoodModel(), true));
             builder.AddInstantEffect(EffectFactoryExtend.AddHookedEffect_GoodEdibleEffectModel(
-                builder, GoodModelExt.GetGoodModel(GoodsTypes.Mat_Raw_Algae), true));
-            
-        }
-        
-        
-
-        
-        public static void CreateNewCornerstones() 
-        {
-            UnityEngine.Debug.Log("Starting to creating custom cornerstones");
-            /*
-            CreateCornerstoneModdingTools();
-            CreateCornerstoneBondingSeason();
-            CreateCornerstoneHumbleBundles();
-            CreateCornerstoneSteelBoots();
-            CreateCornerstoneHoneytraps();
-            CreateCornerstoneJoyOfCreation();
-            CreateCornerstoneBotanyKnowledge();*/
-            CreateForwindzCornerStones();
-            //CreateCornerstoneModdingTools();
-            UnityEngine.Debug.Log("All custom cornerstones created successfully!");
+                builder, GoodsTypes.Mat_Raw_Algae.ToGoodModel(), true));
         }
 
-        private static void CreateCornerstoneModdingTools()
+        private static void CreateFoolhardyGambler()
         {
-            string cornerstoneName = "Modding Tools";
-            string cornerstoneIconPath = "ModdingTools.png";
-
-            HookedEffectBuilder builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
-            builder.SetPositive(true);
-            builder.SetRarity(EffectRarity.Rare);
-            builder.SetObtainedAsCornerstone();
-            builder.SetAvailableInAllBiomesAndSeasons();
+            HookedEffectBuilder builder = CreateBaseHookEffect(
+                "FoolhardyGambler",
+                "FoolhardyGambler.jpeg",
+                EffectRarity.Legendary
+                );
             builder.SetDrawLimit(1);
-            builder.SetDisplayName(cornerstoneName);
-            builder.SetLabel("Modded by Shush");
-            builder.SetDescription("Modders have assembled new tools that bring in new talent. " +
-                                    "Every {0} new Villagers gain +{1} Global Resolve.");
-            builder.SetDescriptionArgs((SourceType.Hook, TextArgType.Amount, 0), (SourceType.HookedEffect, TextArgType.Amount, 0));
-            builder.SetPreviewDescription("+{0} Global Resolve");
-            builder.SetPreviewDescriptionArgs((HookedStateTextArg.HookedStateTextSource.TotalGainIntFromHooked, 0));
-
-            builder.AddHook(HookFactory.AfterXNewVillagers(8));
-            builder.AddHookedEffect(EffectFactory.AddHookedEffect_IncreaseResolve(builder));
-
-            UnityEngine.Debug.Log($"Cornerstone {builder.Name} created");
-        }
-
-        private static void CreateCornerstoneBondingSeason()
-        {
-            string cornerstoneName = "Bonding Season";
-            string cornerstoneIconPath = "BondingSeason.jpg";
-
-            HookedEffectBuilder builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
-            builder.SetPositive(true);
-            builder.SetRarity(EffectRarity.Epic);
-            builder.SetObtainedAsCornerstone();
-            builder.SetAvailableInAllBiomesAndSeasons();
-            builder.SetDrawLimit(1);
-            builder.SetDisplayName(cornerstoneName);
-            builder.SetDescription("The strong smell in the air creates unbreakable bonds in the settlements. When the season changes, gain +{0} Global Resolve for {1} seconds.");
+            builder.AddInstantEffect(
+                EffectFactoryExtend.AddHookedEffect_OnlyTraderEffectModel(
+                    builder, 
+                    TraderTypes.Trader_7_Trickster.ToTraderModel()
+                    ));
+            builder.AddInstantEffect(
+                EffectFactoryExtend.AddHookedEffect_TraderIntervalEffectModel(
+                    builder,
+                    2.5f
+                    ));
+            builder.AddInstantEffect(
+                EffectFactoryExtend.AddHookedEffect_AddTraderFreeEffectChanceEffectModel(
+                    builder,
+                    TraderTypes.Trader_7_Trickster.ToTraderModel(),
+                    0.1f
+                    ));
             builder.SetDescriptionArgs(
-                (SourceType.HookedEffect, TextArgType.NestedArg0, 0),
-                (SourceType.HookedEffect, TextArgType.NestedArg1, 0)
-            );
-            builder.SetLabel("Modded by Shush");
-            builder.AddHook(HookFactory.OnNewSeason(SeasonTypes.All, 1));
-            builder.EffectModel.showHookedRewardsAsPerks = true;
-
-            GameTimePassedHook gameTimePassedRemovalHook = Activator.CreateInstance<GameTimePassedHook>();
-            gameTimePassedRemovalHook.startWithCurrentValue = false;
-            gameTimePassedRemovalHook.seconds = 120f;
-
-            HookedEffectBuilder resolveBonusBuilder = new(PluginInfo.PLUGIN_GUID, cornerstoneName + "_resolveHookedEffect", cornerstoneIconPath);
-            resolveBonusBuilder.EffectModel.hooks = [gameTimePassedRemovalHook];
-            resolveBonusBuilder.SetPositive(true);
-            resolveBonusBuilder.SetRarity(EffectRarity.Epic);
-            resolveBonusBuilder.SetDisplayName(cornerstoneName);
-            resolveBonusBuilder.SetLabel("Timed Bonus - Modded by Shush");
-            resolveBonusBuilder.SetDescription("It's time to create bonds! Global Resolve increased by +{0} for {1} seconds.");
-            resolveBonusBuilder.SetDescriptionArgs(
                 (SourceType.InstantEffect, TextArgType.Amount, 0),
-                (SourceType.RemovalHook, TextArgType.Amount, 0)
-            );
-
-            resolveBonusBuilder.AddRemovalHook(gameTimePassedRemovalHook);
-            resolveBonusBuilder.AddInstantEffect(EffectFactory.AddHookedEffect_IncreaseResolve(builder, 5));
-            resolveBonusBuilder.EffectModel.hasRemovalHooks = true;
-            resolveBonusBuilder.EffectModel.amountText = "+";
-            resolveBonusBuilder.EffectModel.hasNestedAmount = true;
-            resolveBonusBuilder.EffectModel.nestedAmount = new() { source = SourceType.InstantEffect, type = TextArgType.Amount, sourceIndex = 0 };
-
-            resolveBonusBuilder.EffectModel.hasRemovalDynamicStatePreview = true;
-            resolveBonusBuilder.EffectModel.removalDynamicPreviewText = LocalizationManager.ToLocaText(PluginInfo.PLUGIN_GUID, resolveBonusBuilder.Name, "preview", "TIME LEFT: {0}");
-            resolveBonusBuilder.EffectModel.removalStatePreviewArgs = [new() { asTime = true, sourceIndex = 0, source = HookedStateTextArg.HookedStateTextSource.RemovalProgressLeftFloat }];
-
-            builder.AddHookedEffect(resolveBonusBuilder.EffectModel);
-
-            UnityEngine.Debug.Log($"Cornerstone {builder.Name} created");
+                (SourceType.InstantEffect, TextArgType.Amount, 1),
+                (SourceType.InstantEffect, TextArgType.Amount, 2)
+                );
         }
 
-        private static void CreateCornerstoneHumbleBundles()
-        {            
-            string cornerstoneName = "Humble Bundles";
-            string cornerstoneIconPath = "HumbleBundles.jpg";
-            int amountToGet = 3;
-            Settings settings = MB.Settings;
-            GoodModel fabricGoodModel = settings.GetGood(GoodsTypes.Mat_Processed_Fabric.ToName());
-            GoodModel brickGoodModel = settings.GetGood(GoodsTypes.Mat_Processed_Bricks.ToName());
-            GoodModel plankGoodModel = settings.GetGood(GoodsTypes.Mat_Processed_Planks.ToName());
-            GoodModel[] goodsToReceive = [fabricGoodModel, brickGoodModel, plankGoodModel];
-            
-            HookedEffectBuilder builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
-            builder.SetAvailableInAllBiomesAndSeasons();
-            builder.SetObtainedAsCornerstone();
+        private static void CreateGardenDesign()
+        {
+            HookedEffectBuilder builder = CreateBaseHookEffect(
+                "GardenDesign",
+                "GardenDesign.jpeg",
+                EffectRarity.Legendary
+                );
             builder.SetDrawLimit(1);
-            builder.SetPositive(true);
-            builder.SetRarity(EffectRarity.Rare);
-            builder.SetDisplayName(cornerstoneName);
-            builder.SetLabel("Modded by Shush");            
-            builder.SetDescription("Traders like to throw in small extras in their deals with you. When selling goods worth {0} Amber to traders and trade routes, gain {1} " +
-                Utils.GetGoodIconAndName(fabricGoodModel) + ", " +
-                Utils.GetGoodIconAndName(brickGoodModel) + " and " +
-                Utils.GetGoodIconAndName(plankGoodModel) + ". " +
-                "(The bonus is added retroactively).");
+            builder.AddInstantEffect(
+                EffectFactoryExtend.AddHookedEffect_HearthPopPercentEffectModel(
+                    builder,
+                    -0.9f
+                ));
+            builder.AddInstantEffect(
+                EffectFactoryExtend.AddHookedEffect_DecorationPercentEffectModel(
+                    builder,
+                    1.0f
+                ));
+            builder.AddInstantEffect(
+                EffectFactoryExtend.AddHookedEffect_VillagersBreakTimeRateEffectModel(
+                    builder,
+                    1.0f
+                ));
             builder.SetDescriptionArgs(
-                (SourceType.Hook, TextArgType.Amount, 0),
-                (SourceType.HookedEffect, TextArgType.Amount, 0)
-            );
-            builder.SetPreviewDescription("PROGRESS: {0}/{1}. GAINED: {2}");
-            builder.SetPreviewDescriptionArgs(
-               (HookedStateTextArg.HookedStateTextSource.ProgressFloat, 0),
-               (HookedStateTextArg.HookedStateTextSource.HookAmountInt, 0),
-               (HookedStateTextArg.HookedStateTextSource.TotalGainIntFromHooked, 0)
-            );
+                (SourceType.InstantEffect, TextArgType.Amount, 0),
+                (SourceType.InstantEffect, TextArgType.Amount, 1),
+                (SourceType.InstantEffect, TextArgType.Amount, 2)
+                );
+        }
 
-            builder.SetRetroactiveDescription("Expected Gain: {0}");
-            builder.SetRetroactiveDescriptionArgs(
-                (HookedStateTextArg.HookedStateTextSource.TotalGainIntFromHooked, 0)
-            );
+        private static void CreateUsabilityDesign()
+        {
+            const float BASE_VALUE = 0.01f;
+            CompositeEffectBuilder compositeBuilder = CreateBaseCompositeEffect(
+                "UsabilityDesign",
+                "UsabilityDesign.jpeg",
+                EffectRarity.Epic);
 
-            TraderValueSoldHook traderValueSoldHook = Activator.CreateInstance<TraderValueSoldHook>();
-            traderValueSoldHook.amount = 20;
-            traderValueSoldHook.startWithCurrentValue = true;
-            builder.AddHook(traderValueSoldHook);
-
-            foreach (GoodModel goodModel in goodsToReceive)
+            // for all sub effect
+            HookedStateTextArg hookArg0 = new HookedStateTextArg()
             {
-                GoodRef goodRef = new()
-                {
-                    good = goodModel,
-                    amount = amountToGet
-                };
+                source = HookedStateTextSource.TotalGainFloatFromHooked,
+                sourceIndex = 0,
+                asPercentage = true
+            };
 
-                GoodsEffectModel goodEffectsModel = EffectFactory.NewHookedEffect<GoodsEffectModel>(builder);
-                goodEffectsModel.good = goodRef;
-                builder.AddHookedEffect(goodEffectsModel);
+            HookedEffectBuilder comfortBuilder = CreateBaseHookEffect(
+                "UsabilityDesign_Comfort",
+                "UsabilityDesign.jpeg",
+                EffectRarity.None,
+                true, false
+                );
+            DecorationHook comfortHook = HookFactoryExtend.Create_DecorationHook(
+                    DecorationTierTypes.Comfort.ToDecorationTier(),
+                    1);
+            comfortBuilder.AddHook(comfortHook);
+            comfortBuilder.AddHookedEffect(
+                EffectFactoryExtend.AddHookedEffect_HarvestingRateEffectModel(comfortBuilder, BASE_VALUE)
+                );
+            comfortBuilder.SetNestedAmount(SourceType.HookedEffect, TextArgType.Amount, 0);
+            comfortBuilder.SetDescriptionArgs([(SourceType.HookedEffect, TextArgType.Amount, 0)]);
+            HookedEffectAddPreviewKey(comfortBuilder);
+            comfortBuilder.SetPreviewDescriptionArgs(hookArg0);
+            HookedEffectAddRetroactiveKey(comfortBuilder);
+            comfortBuilder.SetRetroactiveDescriptionArgs(hookArg0);
+
+            HookedEffectBuilder aestheticsBuilder = CreateBaseHookEffect(
+                "UsabilityDesign_Aesthetics",
+                "UsabilityDesign.jpeg",
+                EffectRarity.None,
+                true, false
+                );
+            DecorationHook aestheticsHook = HookFactoryExtend.Create_DecorationHook(
+                    DecorationTierTypes.Aesthetics.ToDecorationTier(),
+                    1);
+            aestheticsBuilder.AddHook(aestheticsHook);
+            aestheticsBuilder.AddHookedEffect(
+                EffectFactoryExtend.AddHookedEffect_VillagersSpeedEffectModel(
+                    aestheticsBuilder,
+                    VillagerSpeedRewardType.Global,
+                    BASE_VALUE)
+                );
+            aestheticsBuilder.SetNestedAmount(SourceType.HookedEffect, TextArgType.Amount, 0);
+            aestheticsBuilder.SetDescriptionArgs([(SourceType.HookedEffect, TextArgType.Amount, 0)]);
+            HookedEffectAddPreviewKey(aestheticsBuilder);
+            aestheticsBuilder.SetPreviewDescriptionArgs(hookArg0);
+            HookedEffectAddRetroactiveKey(aestheticsBuilder);
+            aestheticsBuilder.SetRetroactiveDescriptionArgs(hookArg0);
+
+            HookedEffectBuilder harmonyBuilder = CreateBaseHookEffect(
+                "UsabilityDesign_Harmony",
+                "UsabilityDesign.jpeg",
+                EffectRarity.None,
+                true,false
+                );
+            DecorationHook harmonyHook = HookFactoryExtend.Create_DecorationHook(
+                    DecorationTierTypes.Harmony.ToDecorationTier(),
+                    1);
+            harmonyBuilder.AddHook(harmonyHook);
+            harmonyBuilder.AddHookedEffect(
+                EffectFactoryExtend.AddHookedEffect_GlobalExtraProductionChanceEffectModel(harmonyBuilder, BASE_VALUE)
+                );
+            harmonyBuilder.SetDescriptionArgs(
+                [
+                    (SourceType.Hook, TextArgType.Amount, 0),
+                ]
+                );
+            harmonyBuilder.SetNestedAmount(SourceType.HookedEffect, TextArgType.Amount, 0);
+            harmonyBuilder.SetDescriptionArgs([(SourceType.HookedEffect, TextArgType.Amount, 0)]);
+            HookedEffectAddPreviewKey(harmonyBuilder);
+            harmonyBuilder.SetPreviewDescriptionArgs(hookArg0);
+            HookedEffectAddRetroactiveKey(harmonyBuilder);
+            harmonyBuilder.SetRetroactiveDescriptionArgs(hookArg0);
+            compositeBuilder.AddEffects([harmonyBuilder.EffectModel, aestheticsBuilder.EffectModel, comfortBuilder.EffectModel]);
+
+            compositeBuilder.SetNestedFloatAmountIndex(0);
+            compositeBuilder.SetNestedAmountIndex(0);
+            compositeBuilder.SetNestedPreviewIndex(0);// show range 
+            compositeBuilder.SetNestedRetroactivePreviewIndex(0);
+            //compositeBuilder.SetNestedStatePreviewIndex(0); // panel
+            compositeBuilder.SetDescriptionArgs(
+                [
+                    (Eremite.Model.Effects.TextArgType.Amount, 0)
+                ]
+                );
+            compositeBuilder.SetShowEffectAsPerks(true);
+
+        }
+
+        #region Patch
+        /*
+        // Allow to show UsabilityDesign preview, based on its rewards[i]'s hook
+        [HarmonyPatch(
+            typeof(Eremite.View.HUD.Perks.PerkTooltipStatePanel),
+            nameof(Eremite.View.HUD.Perks.PerkTooltipStatePanel.UpdateStates))]
+        [HarmonyPrefix]
+        private static bool PerkTooltipStatePanel_UpdateStates_PrePatch(
+            PerkTooltipStatePanel __instance)
+        {
+            if(__instance.effect==null)
+            {
+                return true;
             }
-
-            UnityEngine.Debug.Log($"Cornerstone {builder.Name} created");
+            if(__instance.effect.Name == $"{PluginInfo.PLUGIN_GUID}_UsabilityDesign")
+            {
+                CompositeEffectModel compositeEffect = __instance.effect as CompositeEffectModel;
+                List<string> hookEffectNames = new();
+                //collect all hook states
+                foreach (var effect in compositeEffect.rewards)
+                {
+                    if(effect is HookedEffectModel hookedEffect)
+                    {
+                        hookEffectNames.Add(hookedEffect.Name);
+                    }
+                } 
+                var hookStates = GameMB.StateService.HookedEffects.activeEffects.Where(
+                    (HookedEffectState e) => hookEffectNames.Contains(e.model));
+                __instance.SetUpHookedState(compositeEffect, hookStates);
+                return false;
+            }
+            return true;
         }
-        private static void CreateCornerstoneSteelBoots()
+        */
+
+        // Allow to show UsabilityDesign retroative preview, based on its rewards[i]'s hook
+        [HarmonyPatch(
+            typeof(CompositeEffectModel),
+            nameof(CompositeEffectModel.GetTooltipFootnote))]
+        [HarmonyPrefix]
+        private static bool CompositeEffectModel_GetTooltipFootnote_PrePatch(
+            CompositeEffectModel __instance, ref string __result)
         {
-            string cornerstoneName = "Steel Boots";
-            string cornerstoneIconPath = "SteelBoots.jpg";
-
-            HookedEffectBuilder builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
-            builder.SetAvailableInAllBiomesAndSeasons();
-            builder.SetObtainedAsCornerstone();
-            builder.SetDrawLimit(1);
-            builder.SetPositive(true);
-            builder.SetRarity(EffectRarity.Epic);
-            builder.SetDisplayName(cornerstoneName);
-            builder.SetLabel("Modded by Shush");
-            builder.SetDescription("Incredibly sturdy steel boots that are perfect for exploring the forest. Scouts move {0} faster.");
-            builder.SetDescriptionArgs((SourceType.InstantEffect, TextArgType.Amount, 0));
-
-            ProfessionSpeedEffectModel professionSpeedEffectModel = EffectFactory.NewHookedEffect<ProfessionSpeedEffectModel>(builder);
-            professionSpeedEffectModel.amount = 0.25f;
-            professionSpeedEffectModel.profession = MB.Settings.GetProfessionModel(Professions.Scout.ToName());
-            builder.AddInstantEffect(professionSpeedEffectModel);
-
-            builder.EffectModel.hooks = [];
-
-            UnityEngine.Debug.Log($"Cornerstone {builder.Name} created");
+            if (__instance.Name == $"{PluginInfo.PLUGIN_GUID}_UsabilityDesign")
+            {
+                List<string> footnotes = new();
+                //collect all hook states
+                foreach (var effect in __instance.rewards)
+                {
+                    string footnote = effect.GetTooltipFootnote();
+                    if(footnote!=null)
+                        footnotes.Add(footnote);
+                }
+                __result = footnotes.Join(null, "\n");
+                return false;
+            }
+            return true;
         }
 
-        private static void CreateCornerstoneHoneytraps()
+        /// <summary>
+        /// This is for VillagersSpeedEffectModel,
+        /// Force it to return its value in `GetFloatAmount()`.
+        /// The original game does not implement it,
+        /// and thus causing problem in retroactive and preview text... :(
+        /// </summary>
+        /// <returns></returns>
+        [HarmonyPatch(
+            typeof(EffectModel),
+            nameof(EffectModel.GetFloatAmount))]
+        [HarmonyPrefix]
+        private static bool EffectModel_GetFloatAmount_PrePatch(
+            EffectModel __instance, ref float __result)
         {
-            string cornerstoneName = "Honeytraps";
-            string cornerstoneIconPath = "Honeytraps.jpg";
-            int amount = 5;
-
-            GoodModel insectGoodModel = MB.Settings.GetGood(GoodsTypes.Food_Raw_Insects.ToName());
-            GoodRef insectGoodRef = new() { good = insectGoodModel, amount = amount };
-
-            EffectBuilder<GoodsPerMinEffectModel> builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
-            builder.SetRarity(EffectRarity.Legendary);
-            builder.SetPositive(true);
-            builder.SetDrawLimit(1);
-            builder.SetAvailableInAllBiomesAndSeasons();
-            builder.SetObtainedAsCornerstone();
-            builder.SetLabel("Modded by Shush");
-            builder.SetDisplayName(cornerstoneName);
-            builder.SetDescription($"Gain {amount} {Utils.GetGoodIconAndName(insectGoodModel)} every minute.");
-            builder.EffectModel.good = insectGoodRef;
+            if(__instance is VillagersSpeedEffectModel villagersSpeedEffect)
+            {
+                __result = villagersSpeedEffect.amount;
+                return false;
+            }
+            return true;
         }
 
-        private static void CreateCornerstoneJoyOfCreation()
-        {
-            string cornerstoneName = "Joy of Creation";
-            string cornerstoneIconPath = "Joy of Creation.jpg";
 
-            HookedEffectBuilder builder = new(PluginInfo.PLUGIN_GUID ,cornerstoneName, cornerstoneIconPath);
-            builder.SetPositive(true);
-            builder.SetRarity(EffectRarity.Rare);
-            builder.SetObtainedAsCornerstone();
-            builder.SetAvailableInAllBiomesAndSeasons();
-            builder.SetDrawLimit(1);
-            builder.SetDisplayName(cornerstoneName);
-            builder.SetLabel("Modded by Shush");
-            builder.SetDescription("Your village is filled with a little bit of hope with every new structure erected. " +
-                                    "Gain {0} resolve any time {1} buildings are constructed. " +
-                                    "(The bonus is added retroactively)");
-            builder.SetDescriptionArgs((SourceType.HookedEffect, TextArgType.Amount, 0), (SourceType.Hook, TextArgType.Amount, 0));
-            builder.SetPreviewDescription("PROGRESS: {0}/{1}. GAINED: {2}");
-            builder.SetPreviewDescriptionArgs(
-               (HookedStateTextArg.HookedStateTextSource.ProgressInt, 0),
-               (HookedStateTextArg.HookedStateTextSource.HookAmountInt, 0),
-               (HookedStateTextArg.HookedStateTextSource.TotalGainIntFromHooked, 0)
-            );
-            builder.SetRetroactiveDescription("Expected Gain: {0}");
-            builder.SetRetroactiveDescriptionArgs(
-                (HookedStateTextArg.HookedStateTextSource.TotalGainIntFromHooked, 0)
-            );
+        #endregion
 
-            BuildingCompletedHook buildingCompletedHook = Activator.CreateInstance<BuildingCompletedHook>();
-            buildingCompletedHook.amount = 3;
-            buildingCompletedHook.startWithCurrentValue = true;
-            buildingCompletedHook.ignoreDecorationBuildings = true;
-            buildingCompletedHook.ignoreRoads = true;
 
-            builder.AddHook(buildingCompletedHook);
-            builder.AddHookedEffect(EffectFactory.AddHookedEffect_IncreaseResolve(builder, 1));
-        }
-
-        private static void CreateCornerstoneBotanyKnowledge()
-        {
-            string cornerstoneName = "Botany Knowledge";
-            string cornerstoneIconPath = "Botany Knowledge.jpg";
-
-            HookedEffectBuilder builder = new(PluginInfo.PLUGIN_GUID, cornerstoneName, cornerstoneIconPath);
-            builder.SetPositive(true);
-            builder.SetRarity(EffectRarity.Legendary);
-            builder.SetObtainedAsCornerstone();
-            builder.SetAvailableInAllBiomesAndSeasons();
-            builder.SetDrawLimit(1);
-            builder.SetDisplayName(cornerstoneName);
-            builder.SetLabel("Modded by Shush");
-            builder.SetDescription("An ever increasing understanding of plants pushes the potential of handling roots. " +
-                "Root production increases by {0} every {1} times it's produced.");
-            builder.SetDescriptionArgs(
-                    (SourceType.HookedEffect, TextArgType.Amount, 0),
-                    (SourceType.Hook, TextArgType.Amount, 0)
-                );
-
-            builder.SetPreviewDescription("PROGRESS: {0}/{1}. GAINED: {2}");
-            builder.SetPreviewDescriptionArgs(
-                    (HookedStateTextArg.HookedStateTextSource.ProgressInt, 0),
-                    (HookedStateTextArg.HookedStateTextSource.HookAmountInt, 0),
-                    (HookedStateTextArg.HookedStateTextSource.TotalGainIntFromHooked, 0)
-                );
-
-            GoodModel rootGoodModel = MB.Settings.GetGood(GoodsTypes.Food_Raw_Roots.ToName());
-            GoodRef rootGoodRefForHook = new() { good = rootGoodModel, amount = 25 };
-            GoodRef rootGoodRefForEffect = new() { good = rootGoodModel, amount = 1 };
-
-            GoodProducedHook goodProducedHook = Activator.CreateInstance<GoodProducedHook>();
-            goodProducedHook.good = rootGoodRefForHook;
-            goodProducedHook.cycles = true;
-            builder.AddHook(goodProducedHook);
-
-            GoodsRawProductionEffectModel goodsRawProductionEffect = EffectFactory.NewHookedEffect<GoodsRawProductionEffectModel>(builder);
-            goodsRawProductionEffect.good = rootGoodRefForEffect;
-            builder.AddHookedEffect(goodsRawProductionEffect);
-        }
     }
 }

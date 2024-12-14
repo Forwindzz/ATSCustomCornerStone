@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Forwindz.Framework.Extend
+namespace Forwindz.Framework.Utils.Extend
 {
     public static class GoodModelExt
     {
@@ -19,11 +19,6 @@ namespace Forwindz.Framework.Extend
                 }
             }
             return false;
-        }
-
-        public static GoodModel GetGoodModel(GoodsTypes goodType)
-        {
-            return MB.Settings.GetGood(goodType.ToName());
         }
     }
 }

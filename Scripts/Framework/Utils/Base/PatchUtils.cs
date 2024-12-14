@@ -97,5 +97,25 @@ namespace Forwindz.Framework.Utils
             }
             return null;
         }
+
+        public static FieldInfo GetDeclaredField<T>(string fieldName) where T : class
+        {
+            FieldInfo info = AccessTools.DeclaredField(typeof(T),fieldName);
+            if(info==null)
+            {
+                FLog.Error($"Cannot find declared field: {typeof(T).Namespace}.{typeof(T).Name}.{fieldName}");
+            }
+            return info;
+        }
+
+        public static FieldInfo GetField<T>(string fieldName) where T : class
+        {
+            FieldInfo info = AccessTools.Field(typeof(T), fieldName);
+            if (info == null)
+            {
+                FLog.Error($"Cannot find declared field: {typeof(T).Namespace}.{typeof(T).Name}.{fieldName}");
+            }
+            return info;
+        }
     }
 }
