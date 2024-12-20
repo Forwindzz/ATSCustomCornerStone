@@ -1,18 +1,16 @@
 ﻿using ATS_API.Effects;
-using ATS_API.Helpers;
 using Eremite.Model;
 using Eremite.Model.Effects;
 using ForwindzCustomPerks.Scripts.Framework.Utils.Extend;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UnityEngine;
+
+//TODO: replace with API CompositeEffectBuilder
 
 namespace Forwindz.Framework.Utils
 {
     public class CompositeEffectBuilder : EffectBuilder<CompositeEffectModel>
     {
-        public const int NO_INDEX = -1;
         public EffectModel[] Effects
         {
             get => m_effectModel.rewards;
@@ -107,7 +105,7 @@ namespace Forwindz.Framework.Utils
         /// This indicates which effect we should use as a preview.
         /// If you do not want to provide a nested preview,
         /// code like this: 
-        /// `SetNestedPreviewIndex(CompositeEffectBuilder.NO_INDEX);`
+        /// `SetNestedPreviewIndex(-1);`
         /// </summary>
         /// <param name="index">
         /// if the index is negative, it indicates the 

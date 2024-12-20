@@ -361,11 +361,6 @@
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="DesignGeneration\" />
-    <Folder Include="Scripts\CustomHooks\" />
-  </ItemGroup>    
 
   <Target Name="Deploy" AfterTargets="Build">
 		<ItemGroup>
@@ -374,10 +369,10 @@
       <MetaFile Include="$(OutputPath)\ModPackageInfo\*.*" />
 		</ItemGroup>
 
-		<Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\" />
-    <Copy SourceFiles="@(Assets)" DestinationFiles="@(Assets->'$(BepInExPath)\BepInEx\plugins\assets\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\ForwindzCustomCornerstones\" />
+    <Copy SourceFiles="@(Assets)" DestinationFiles="@(Assets->'$(BepInExPath)\BepInEx\plugins\ForwindzCustomCornerstones\assets\%(RecursiveDir)%(Filename)%(Extension)')" />
 
-    <Copy SourceFiles="@(MetaFile)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\" />
+    <Copy SourceFiles="@(MetaFile)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\ForwindzCustomCornerstones\" />
 	  
   </Target>
 </Project>

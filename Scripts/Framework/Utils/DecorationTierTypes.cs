@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Forwindz.Framework.Utils
 {
+    //API has already done this!
+
+    /*
     public enum DecorationTierTypes
     {
         Comfort = 1,
@@ -40,4 +43,5 @@ namespace Forwindz.Framework.Utils
             { DecorationTierTypes.Harmony, "DecorationTier 3"}
             };
     }
+    */
 }

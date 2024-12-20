@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿//#define DEBUG_CODE
 
 using BepInEx;
 using Eremite;
@@ -19,10 +19,11 @@ namespace Forwindz
     {
         public const string PLUGIN_GUID= "Forwindz.CustomCornerstones";
         public const string PLUGIN_NAME = "f9's cornerstones";
-        public const string PLUGIN_VERSION = "1.0";
+        public const string PLUGIN_VERSION = "1.0.0";
     }
 
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInDependency("API", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin Instance;
@@ -43,14 +44,14 @@ namespace Forwindz
             Instance.Logger.LogInfo("Initializing post Init References in MainController");
             LocalizationLoader.LoadLocalization("assets/lang");
             CustomCornerstones.CreateNewCornerstones();
-            //Utils.SetSeasonsTime(20f, 20f, 10f, SeasonQuarter.First); // makes cornerstones appear immediately with game start
         }
 
+#if DEBUG_CODE
         [HarmonyPatch(typeof(CornerstonesService), nameof(CornerstonesService.GenerateRewardsFor))]
         [HarmonyPrefix]
         private static bool GenerateRewardsFor_PrePatch(CornerstonesService __instance, SeasonRewardModel model, ref string viewConfiguration, ref bool isExtra)
         {
-#if DEBUG
+
             Log.Info(string.Format("[Cor] Generate{0} cornerstones for {1} {2} {3} with model {4} {5} {6}",
             [
                 __instance.GetExtraLogSufix(isExtra),
@@ -81,7 +82,7 @@ namespace Forwindz
 
             __instance.Picks.Add(reward);
             __instance.OnPicksChanged.OnNext();
-#endif
+
             return false;
         }
 
@@ -137,6 +138,6 @@ namespace Forwindz
             }
         }
         */
-
+#endif
     }
 }

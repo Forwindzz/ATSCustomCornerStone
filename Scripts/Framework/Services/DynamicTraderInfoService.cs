@@ -268,7 +268,7 @@ namespace ForwindzCustomPerks.Framework.Services
         {
             if(__instance.State.visit != null)
             {
-                return false;
+                return true;
             }
 
             DynamicTraderInfoService service = CustomServiceManager.GetService<DynamicTraderInfoService>();
@@ -278,9 +278,9 @@ namespace ForwindzCustomPerks.Framework.Services
                 // The next trader is always this trader!
                 FLog.Info($"Force to set trader as {traderModel.Name}");
                 __instance.State.visit = __instance.CreateVisit(traderModel, 0);
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
         /*
         [HarmonyPatch(typeof(Eremite.Services.TradeService), nameof(Eremite.Services.TradeService.CreateVisit))]
@@ -321,7 +321,8 @@ namespace ForwindzCustomPerks.Framework.Services
             new Type[] { typeof(EffectModel)})]
         [HarmonyPostfix]
         private static void TradeService_GetValueInCurrency_Effect_PostPatch(
-            TradeService __instance, ref float __result,
+            TradeService __instance, 
+            ref float __result,
             EffectModel effect)
         {
             DynamicTraderInfoService service = CustomServiceManager.GetService<DynamicTraderInfoService>();

@@ -1,36 +1,35 @@
-# Against The Storm - My First Mod
 
-This is my first attempt at a mod in Against The Storm.
+# 简介 Intro
 
-This mod is based on Shush's Tutorial:
-https://github.com/Shushishtok/AtS-my-first-mod/blob/master/Getting%20Started.md#changing-existing-stuff
+一个自定义基石mod，作者是f⑨ (Forwindz)
+A customized cornerstone mod, by f⑨ (Forwindz)
 
-Still in exploration and development, the code might be messy. 
-I am new to Harmony 
+设计上倾向修改机制，或者一些有意思的玩法。
+强度可能偏高，但是应该能比得过10琥珀！
+The design tends to modify the game mechanism, or some interesting gameplay.
+It might a bit unbalance (a bit strong), But at least worther than 10 ambers!
 
-There is still some codes from Shush's Tutorial, and it is not playable now. (I have not removed all of them, and still orgnize my code)
+支持中文和英文！
+Support Chinese and English!
+\_(:з」∠)\_
 
-# Build
+添加4种基石。
+- 沙拉食谱 （可以吃草了！）
+- 盲目的赌徒 （总督沉迷盲盒不可自拔）
+- 园林景观设计 （降低火塘升级需求）
+- 可用性设计 （装饰提供加成）
 
-Requires:
-- BepInEx
-- API Mod 
+Add 4 cornerstones.
+- Salad Recipe (Now you can eat non-ediable goods!)
+- Foolhardy Gambler (We need more blind boxes)
+- Garden Design (Reduce hearth upgrade requirement)
+- Usability Design (Decorations provide extra buff)
 
-Links of API Mod: [ThunderStone](https://thunderstore.io/c/against-the-storm/p/ATS_API_Devs/API/), [GitHub](https://github.com/JamesVeug/AgainstTheStormAPI)
 
-Create file `Directory.Build.props` in the repository root
+# 其他 Other
 
-Set up your `Steam` `Against The Storm` `BepInEx` path like this:
-```xml
-<Project>
-  <PropertyGroup>
-    <SteamPath>D:\Program Files (x86)\Steam\steam.exe</SteamPath>
-    <StormPath>E:/Program Files/Steam/steamapps/common/Against the Storm</StormPath>
-    <BepInExPath>C:/Users/Cirno/AppData/Roaming/Thunderstore Mod Manager/DataFolder/AgainstTheStorm/profiles/Default</BepInExPath>
-  </PropertyGroup>
-</Project>
-```
+未来可能添加更多有意思的基石
+I might add more interesting cornerstones in the future
 
-Then open it with `VS2022` and build it!
-
-You can run it with Steam, but I am not clear about how to attach the debugger
+有问题可以前往(GitHub issue)[https://github.com/Forwindzz/ATSCustomCornerStone/issues]反馈。
+If there are any bugs or problems, please report it to (Github issue)[https://github.com/Forwindzz/ATSCustomCornerStone/issues]

@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿#define NOT_USE_API_SAVE
+using Cysharp.Threading.Tasks;
 using Eremite;
 using Eremite.Services;
 using Forwindz.Framework.Utils;
@@ -10,6 +11,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
+
+#if NOT_USE_API_SAVE
 namespace Forwindz.Framework.Services
 {
         
@@ -288,3 +291,4 @@ namespace Forwindz.Framework.Services
         #endregion
     }
 }
+#endif

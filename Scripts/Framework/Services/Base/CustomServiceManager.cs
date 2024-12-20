@@ -123,6 +123,21 @@ namespace Forwindz.Framework.Services
             return null;
         }
 
+        public static T GetServiceSafe<T>() where T : IService
+        {
+            if (customServices.TryGetValue(typeof(T), out WeakReference<IService> refService))
+            {
+                if (refService.TryGetTarget(out IService result))
+                {
+                    if(result is T resultT)
+                    {
+                        return resultT;
+                    }
+                }
+            }
+            return default;
+        }
+
         #region Patch
         //-------------------------------
         // Patch

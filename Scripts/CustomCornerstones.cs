@@ -1,11 +1,8 @@
 ﻿using ATS_API.Effects;
 using ATS_API.Helpers;
-using ATS_API.Localization;
-using Eremite;
 using Eremite.Model;
 using Eremite.Model.Effects;
 using Eremite.Model.Effects.Hooked;
-using System;
 using Forwindz.Framework.Utils;
 using TextArgType = Eremite.Model.Effects.Hooked.TextArgType;
 using HarmonyLib;
@@ -16,10 +13,8 @@ using System.Linq;
 
 namespace Forwindz.Content
 {
-    //TODO: clean up shush's code
     internal class CustomCornerstones
     {
-
         static CustomCornerstones()
         {
             PatchesManager.RegPatch<CustomCornerstones>();
@@ -45,8 +40,10 @@ namespace Forwindz.Content
             if(addAsCornerStone)
             {
                 builder.SetObtainedAsCornerstone();
+                //TODO: replace this with an elegant ATS_API's API
+                //builder.SetAvailableInAllBiomesAndSeasons();
+                EffectAvailability.RegularCornerstones.Add(builder);
             }
-            builder.SetAvailableInAllBiomesAndSeasons();
             builder.SetLabel("Mod - Forwindz");
             builder.SetDescriptionKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_description");
             builder.SetDisplayNameKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_displayName");
@@ -63,7 +60,11 @@ namespace Forwindz.Content
             builder.SetPositive(isPositive);
             builder.SetRarity(rarity);
             builder.SetObtainedAsCornerstone();
-            builder.SetAvailableInAllBiomesAndSeasons();
+
+            //TODO: replace this with an elegant ATS_API's API
+            //builder.SetAvailableInAllBiomesAndSeasons();
+            EffectAvailability.RegularCornerstones.Add(builder);
+
             builder.SetLabel("Mod - Forwindz");
             builder.SetDescriptionKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_description");
             builder.SetDisplayNameKey($"{PluginInfo.PLUGIN_GUID}_{cornerstoneName}_displayName");
@@ -123,13 +124,13 @@ namespace Forwindz.Content
             builder.AddInstantEffect(
                 EffectFactoryExtend.AddHookedEffect_TraderIntervalEffectModel(
                     builder,
-                    2.5f
+                    0.85f
                     ));
             builder.AddInstantEffect(
                 EffectFactoryExtend.AddHookedEffect_AddTraderFreeEffectChanceEffectModel(
                     builder,
                     TraderTypes.Trader_7_Trickster.ToTraderModel(),
-                    0.1f
+                    0.15f
                     ));
             builder.SetDescriptionArgs(
                 (SourceType.InstantEffect, TextArgType.Amount, 0),

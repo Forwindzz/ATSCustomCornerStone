@@ -5,6 +5,7 @@ using Eremite;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 
@@ -18,7 +19,9 @@ namespace Forwindz.Framework.Utils
         /// <param name="folderPath">The localization folder</param>
         public static void LoadLocalization(string folderPath = "lang")
         {
-            string folderFullPath = Path.Combine(Paths.PluginPath, folderPath);
+            string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            FLog.Info($"f9 cornerstone plugin patcher path {modPath}");
+            string folderFullPath = Path.Combine(modPath, folderPath);
             try
             {
                 string[] filePaths = Directory.GetFiles(folderFullPath, "*.json", SearchOption.AllDirectories);
