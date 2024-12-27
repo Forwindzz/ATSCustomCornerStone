@@ -5,34 +5,32 @@ using Eremite.Model.Orders;
 using Eremite.Services;
 using Eremite.Services.Orders;
 using Forwindz.Framework.Utils;
-using HarmonyLib;
 using Newtonsoft.Json;
 using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UniRx;
 
 namespace Forwindz.Framework.Services
 {
 
-    internal class DecorationModelInfo
+    internal class DecorationModelDelegate
     {
-        public DecorationTier tier;
-        public int decorationScore;
+        public DynamicValueInt decorationScoreDynamic;
 
-        public DecorationModelInfo(DecorationModel decorationModel)
+        public DecorationModelDelegate(DecorationModel decorationModel)
         {
-            decorationScore = decorationModel.decorationScore;
-            tier = decorationModel.tier;
+            decorationScoreDynamic = new DynamicValueInt(
+                () => decorationModel.decorationScore,
+                (int delta) => decorationModel.decorationScore += delta
+                );
         }
 
-        public void Apply(DecorationModel decorationModel)
+        public void RestoreToOriginal()
         {
-            decorationModel.decorationScore = decorationScore;
-            decorationModel.tier = tier;
+            decorationScoreDynamic.RestoreOriginalValue();
         }
     }
 
@@ -44,7 +42,7 @@ namespace Forwindz.Framework.Services
     internal class DynamicBuildingState
     {
         [JsonIgnore]
-        public Dictionary<string, DecorationModelInfo> originalDecorations = new();
+        public Dictionary<string, DecorationModelDelegate> originalDecorations = new();
 
         public Dictionary<string, DynamicDecorationStateInfo> decorationStates = new();
 
@@ -53,7 +51,7 @@ namespace Forwindz.Framework.Services
             List<DecorationModel> decorationModels = MB.Settings.Buildings.FilterCast<DecorationModel>().ToList();
             foreach (var decorationModel in decorationModels)
             {
-                originalDecorations[decorationModel.Name] = new DecorationModelInfo(decorationModel);
+                originalDecorations[decorationModel.Name] = new DecorationModelDelegate(decorationModel);
             }
             ApplyStates();
         }
@@ -92,18 +90,17 @@ namespace Forwindz.Framework.Services
         public void ApplyDecorationState(string decoName)
         {
             DynamicDecorationStateInfo dynamicDecoInfo = decorationStates[decoName];
-            DecorationModelInfo originalDecoInfo = originalDecorations[decoName];
-            DecorationModel currentDecoModel = (DecorationModel)MB.Settings.GetBuilding(decoName);
-            currentDecoModel.decorationScore = (int)(originalDecoInfo.decorationScore * dynamicDecoInfo.decorationPercent);
+            DecorationModelDelegate decoDelegate = originalDecorations[decoName];
+            var dynamicDecorationScore = decoDelegate.decorationScoreDynamic;
+            dynamicDecorationScore.SetNewValue((int)(decoDelegate.decorationScoreDynamic.BaseValue * dynamicDecoInfo.decorationPercent));
         }
 
         public void DestoryRestore()
         {
             foreach (var decoName in decorationStates.Keys)
             {
-                DecorationModelInfo originalDecoInfo = originalDecorations[decoName];
-                DecorationModel currentDecoModel = (DecorationModel)MB.Settings.GetBuilding(decoName);
-                currentDecoModel.decorationScore = originalDecoInfo.decorationScore;
+                DecorationModelDelegate decoDelegate = originalDecorations[decoName];
+                decoDelegate.RestoreToOriginal();
             }
         }
     }

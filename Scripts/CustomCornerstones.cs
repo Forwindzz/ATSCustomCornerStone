@@ -256,9 +256,9 @@ namespace Forwindz.Content
 
             compositeBuilder.SetNestedFloatAmountIndex(0);
             compositeBuilder.SetNestedAmountIndex(0);
-            compositeBuilder.SetNestedPreviewIndex(0);// show range 
-            compositeBuilder.SetNestedRetroactivePreviewIndex(0);
-            //compositeBuilder.SetNestedStatePreviewIndex(0); // panel
+            //compositeBuilder.SetNestedPreviewIndex(0);
+            compositeBuilder.SetNestedRetroactiveIndex(0);
+
             compositeBuilder.SetDescriptionArgs(
                 [
                     (Eremite.Model.Effects.TextArgType.Amount, 0)

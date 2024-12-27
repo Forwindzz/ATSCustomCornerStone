@@ -4,18 +4,51 @@ using Cysharp.Threading.Tasks;
 using Eremite;
 using Eremite.Services;
 using Forwindz.Framework.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-//TODO: wait for finishing API save system
 #if !NOT_USE_API_SAVE
 namespace Forwindz.Framework.Services
 {
-        
-
     public class ExtraStateAPIService : GameService, IExtraStateService, IService
     {
+        [Serializable]
+        private class SaveInformation
+        {
+            [JsonProperty]
+            public object obj;
+            [JsonProperty]
+            public Type type;
+
+            public SaveInformation() { }
+
+            public SaveInformation(object obj)
+            {
+                this.obj = obj;
+                this.type = obj.GetType();
+            }
+
+            public SaveInformation(object obj, Type type)
+            {
+                this.obj = obj;
+                this.type = type;
+            }
+
+            public void TryRecover()
+            {
+                if (obj == null)
+                {
+                    return;
+                }
+                if(obj is JObject jobj)
+                {
+                    obj = jobj.ToObject(type);
+                }
+            }
+        }
 
         private class TrackedField
         {
@@ -40,11 +73,9 @@ namespace Forwindz.Framework.Services
                 return field.GetValue(owner);
             }
         }
-        public static string SAVE_PATH = "f9_mod\\ModGameSave.save";
-        public const string SAVE_KEY_INFO = "MOD_FORWINDZ_SAVE_GAME";
-        private static bool loadedFromAPI = false;
         private static ModSaveData modSaveData = null;
         private static SaveFileState modSaveState = SaveFileState.LoadedFile;
+        private static bool finishAPILoading = false;
 
         private List<TrackedField> trackFieldList = new();
 
@@ -52,25 +83,32 @@ namespace Forwindz.Framework.Services
         {
             CustomServiceManager.RegGameService<ExtraStateAPIService>();
             PatchesManager.RegPatch(typeof(ExtraStateAPIService));
+            // The design of API save system is independent with game services...
+            // This will mess up the life cycle of everything... hope everything goes well...
+            // I think it is necessary to have life cycle concept in API, otherwise it is impossible to handle any procedural logic.
             ModdedSaveManager.ListenForLoadedSaveData(
                 PluginInfo.PLUGIN_GUID, OnAPILoadSaveDataStatic);
-            //ModdedSaveManager.AddErrorHandler(
-            //    PluginInfo.PLUGIN_GUID, OnAPILoadErrorStatic);
+            ModdedSaveManager.ListenForResetSettlementSaveData(
+                PluginInfo.PLUGIN_GUID, OnAPIResetSaveDataStatic);
         }
 
-        //private static UniTask<ModSaveData> OnAPILoadErrorStatic(ErrorData data)
-        //{
-        //    return UniTask.CompletedTask;
-        //}
-
-        private static void OnAPILoadSaveDataStatic(ModSaveData data, SaveFileState state)
+        // Invoke when create new settlement (usually in the init)
+        private static void OnAPIResetSaveDataStatic(ModSaveData data)
         {
             ExtraStateAPIService service = CustomServiceManager.GetServiceSafe<ExtraStateAPIService>();
-            if(service==null)
+            if (service == null)
             {
                 return;
             }
+            FLog.Info("reset API settlment data callback!");
             service.ScanAttributes();
+            service.OnNewSave(data);
+            finishAPILoading = true;
+        }
+
+        // Invoke when switch the profile...
+        private static void OnAPILoadSaveDataStatic(ModSaveData data, SaveFileState state)
+        {
             modSaveData = data;
             modSaveState = state;
         }
@@ -79,8 +117,8 @@ namespace Forwindz.Framework.Services
 
         public override IService[] GetDependencies()
         {
-            return new IService[] { 
-                Serviceable.StateService, 
+            return new IService[] {
+                Serviceable.StateService,
                 Serviceable.GameSaveService,
                 Serviceable.SavesIOService
             };
@@ -88,6 +126,14 @@ namespace Forwindz.Framework.Services
 
         public async override UniTask OnLoading()
         {
+            ScanAttributes();
+            if (MB.GameSaveService.IsNewGame())
+            {
+                FLog.Info("Start wait api reset save data!");
+                await AsyncUtils.WaitForConditionAsync(() => finishAPILoading, 50);
+                FLog.Info("Wait api reset save data finished!");
+                return;
+            }
             FLog.Info("Load Extra States!");
             await LoadAllStates();
             return;
@@ -95,24 +141,11 @@ namespace Forwindz.Framework.Services
 
         private void OnAPILoadSaveData(ModSaveData data, SaveFileState state)
         {
-            loadedFromAPI = true;
             var settlementData = data.CurrentSettlement;
             switch (state)
             {
                 case SaveFileState.NewFile:
-                    FLog.Info($"Setup save for new file, elements count: {trackFieldList.Count}");
-                    foreach (TrackedField trackedField in trackFieldList)
-                    {
-                        try
-                        {
-                            settlementData.SetValue(trackedField.saveName, trackedField.GetValue());
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Error($"Failed to load & apply extra state {trackedField.saveName} to field");
-                            Log.Error(e);
-                        }
-                    }
+                    OnNewSave(data);
                     break;
                 case SaveFileState.LoadedFile:
                     FLog.Info($"Setup after loading, elements count: {trackFieldList.Count}");
@@ -120,7 +153,9 @@ namespace Forwindz.Framework.Services
                     {
                         try
                         {
-                            trackedField.ApplyValue(settlementData.GetValue(trackedField.saveName));
+                            SaveInformation saveInformation = settlementData.GetValueAsObject<SaveInformation>(trackedField.saveName);
+                            saveInformation.TryRecover();
+                            trackedField.ApplyValue(saveInformation.obj);
                         }
                         catch (Exception e)
                         {
@@ -134,13 +169,14 @@ namespace Forwindz.Framework.Services
 
         public override void OnDestroy()
         {
-            loadedFromAPI = false;
             trackFieldList.Clear();
+            finishAPILoading = false;
             base.OnDestroy();
         }
 
         private void ScanAttributes()
         {
+            trackFieldList.Clear();
             var services = CustomServiceManager.GameServicesList;
             foreach (var service in services)
             {
@@ -148,13 +184,13 @@ namespace Forwindz.Framework.Services
                 foreach (var field in fields)
                 {
                     ModSerializedFieldAttribute attribute = field.GetCustomAttribute<ModSerializedFieldAttribute>();
-                    if (attribute != null && 
-                        (attribute.SLType==SaveLoadType.Game || attribute.SLType==SaveLoadType.Unknown)
+                    if (attribute != null &&
+                        (attribute.SLType == SaveLoadType.Game || attribute.SLType == SaveLoadType.Unknown)
                         )
                     {
                         var value = field.GetValue(service);
                         string name = attribute.SaveName;
-                        if(name==null || name.Length==0)
+                        if (name == null || name.Length == 0)
                         {
                             string typeInfo = $"{service.GetType().FullName}#{field.FieldType.FullName}#{field.Name}";
                             name = $"{service.GetType().Name}.{field.Name}_{Utils.Utils.GetMd5Hash(typeInfo)}";
@@ -169,7 +205,24 @@ namespace Forwindz.Framework.Services
         {
             OnAPILoadSaveData(modSaveData, modSaveState);
             return UniTask.CompletedTask;
-            //await AsyncUtils.WaitForConditionAsync(() => loadedFromAPI);
+        }
+
+        private void OnNewSave(ModSaveData data)
+        {
+            SaveData settlementData = data.CurrentSettlement;
+            FLog.Info($"Setup save for new file, elements count: {trackFieldList.Count}");
+            foreach (TrackedField trackedField in trackFieldList)
+            {
+                try
+                {
+                    settlementData.SetValue(trackedField.saveName, new SaveInformation(trackedField.GetValue()));
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to load & apply extra state {trackedField.saveName} to field");
+                    Log.Error(e);
+                }
+            }
         }
 
         public void SaveAllStates()
@@ -179,14 +232,7 @@ namespace Forwindz.Framework.Services
 
         public T GetStateSafe<T>(string name)
         {
-            try
-            {
-                return (T)ModdedSaveManager.GetSaveData(PluginInfo.PLUGIN_GUID).CurrentSettlement.GetValue(name);
-            }
-            catch (Exception ex)
-            {
-            }
-            return default;
+            return (T)ModdedSaveManager.GetSaveData(PluginInfo.PLUGIN_GUID).CurrentSettlement.GetValue(name);
         }
 
 

@@ -2,31 +2,54 @@
 using Eremite;
 using Eremite.Buildings;
 using Eremite.Services;
-using Forwindz.Framework.Utils.Extend;
+using Forwindz.Framework.Utils;
 using Newtonsoft.Json;
 using Sirenix.Utilities;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace Forwindz.Framework.Services
 {
+    public class HubTierDelegate
+    {
+        public DynamicValueInt hubPop;
+
+        public HubTierDelegate(HubTier hub) 
+        {
+            hubPop = new DynamicValueInt(
+                () => hub.minPopulation,
+                (int delta) => hub.minPopulation += delta
+                );
+        }
+
+        public void RestoreToOriginal()
+        {
+            hubPop.RestoreOriginalValue();
+        }
+    }
+
     internal class DynamicHearthState
     {
         [JsonIgnore]
-        public HubTier[] originalHubTiers = null;
+        public List<HubTierDelegate> hubTierDelegates = new();
         public float hubPopRequirePercent = 1.0f;
         public int hubPopRequireCount = 0;
 
         public void InitGame()
         {
-            originalHubTiers = MB.Settings.hubsTiers.DeepClone();
+            foreach(var hubTier in MB.Settings.hubsTiers)
+            {
+                hubTierDelegates.Add(new HubTierDelegate(hubTier));
+            }
         }
 
         public void ApplyStates()
         {
             HubTier[] hubTiers = MB.Settings.hubsTiers;
-            for (int i = 0; i < hubTiers.Length; i++)
+            foreach(HubTierDelegate hubTierDelegate in hubTierDelegates)
             {
-                hubTiers[i].minPopulation = (int)Mathf.Max(originalHubTiers[i].minPopulation * hubPopRequirePercent + hubPopRequireCount, 0);
+                hubTierDelegate.hubPop.SetNewValue(
+                    (int)(hubTierDelegate.hubPop.BaseValue * hubPopRequirePercent + hubPopRequireCount)
+                    );
             }
             // refresh hearth
             var hearthes = Serviceable.BuildingsService.Buildings.Values.FilterCast<Hearth>();
@@ -38,16 +61,17 @@ namespace Forwindz.Framework.Services
 
         public void DestoryRestore()
         {
-            HubTier[] hubTiers = MB.Settings.hubsTiers;
-            for (int i = 0; i < hubTiers.Length; i++)
+            foreach (HubTierDelegate hubTierDelegate in hubTierDelegates)
             {
-                hubTiers[i].minPopulation = originalHubTiers[i].minPopulation;
+                hubTierDelegate.RestoreToOriginal();
             }
         }
     }
 
     public class DynamicHearthService : GameService, IDynamicHearthService, IService
     {
+
+
         [ModSerializedField]
         private DynamicHearthState state = new();
 

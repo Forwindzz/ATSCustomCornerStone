@@ -377,10 +377,10 @@
       <MetaFile Include="$(OutputPath)\LICENSE" />
 		</ItemGroup>
 
-		<Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\ForwindzCustomCornerstones\" />
-    <Copy SourceFiles="@(Assets)" DestinationFiles="@(Assets->'$(BepInExPath)\BepInEx\plugins\ForwindzCustomCornerstones\assets\%(RecursiveDir)%(Filename)%(Extension)')" />
+		<Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\Forwindz-ForwindzCustomCornerstones\" />
+    <Copy SourceFiles="@(Assets)" DestinationFiles="@(Assets->'$(BepInExPath)\BepInEx\plugins\Forwindz-ForwindzCustomCornerstones\assets\%(RecursiveDir)%(Filename)%(Extension)')" />
 
-    <Copy SourceFiles="@(MetaFile)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\ForwindzCustomCornerstones\" />
+    <Copy SourceFiles="@(MetaFile)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\Forwindz-ForwindzCustomCornerstones\" />
 	  
   </Target>
 </Project>
