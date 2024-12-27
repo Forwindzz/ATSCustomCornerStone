@@ -356,6 +356,12 @@
     <None Include="ModPackageInfo\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="LICENSE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -367,6 +373,8 @@
 			<Assembly Include="$(OutputPath)\$(AssemblyName).dll" />
       <Assets Include="$(OutputPath)\assets\**\*.*" />
       <MetaFile Include="$(OutputPath)\ModPackageInfo\*.*" />
+      <MetaFile Include="$(OutputPath)\README.md" />
+      <MetaFile Include="$(OutputPath)\LICENSE" />
 		</ItemGroup>
 
 		<Copy SourceFiles="@(Assembly)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\ForwindzCustomCornerstones\" />

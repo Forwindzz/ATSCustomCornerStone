@@ -1,23 +1,27 @@
 
-# ¼ò½é Intro
+# ç®€ä»‹ Intro
 
-Ò»¸ö×Ô¶¨Òå»ùÊ¯mod£¬×÷ÕßÊÇf¢á (Forwindz)
-A customized cornerstone mod, by f¢á (Forwindz)
+ä¸€ä¸ªè‡ªå®šä¹‰åŸºçŸ³modï¼Œä½œè€…æ˜¯fâ‘¨ (Forwindzz)
 
-Éè¼ÆÉÏÇãÏòĞŞ¸Ä»úÖÆ£¬»òÕßÒ»Ğ©ÓĞÒâË¼µÄÍæ·¨¡£
-Ç¿¶È¿ÉÄÜÆ«¸ß£¬µ«ÊÇÓ¦¸ÃÄÜ±ÈµÃ¹ı10çúçê£¡
+A customized cornerstone mod, by fâ‘¨ (Forwindzz)
+
+è®¾è®¡ä¸Šå€¾å‘ä¿®æ”¹æœºåˆ¶ï¼Œæˆ–è€…ä¸€äº›æœ‰æ„æ€çš„ç©æ³•ã€‚
+å¼ºåº¦å¯èƒ½åé«˜ï¼Œä½†æ˜¯åº”è¯¥èƒ½æ¯”å¾—è¿‡10ç¥ç€ï¼
+
 The design tends to modify the game mechanism, or some interesting gameplay.
 It might a bit unbalance (a bit strong), But at least worther than 10 ambers!
 
-Ö§³ÖÖĞÎÄºÍÓ¢ÎÄ£¡
-Support Chinese and English!
-\_(:§Ù¡¹¡Ï)\_
+æ”¯æŒä¸­æ–‡å’Œè‹±æ–‡ï¼
 
-Ìí¼Ó4ÖÖ»ùÊ¯¡£
-- É³À­Ê³Æ× £¨¿ÉÒÔ³Ô²İÁË£¡£©
-- Ã¤Ä¿µÄ¶ÄÍ½ £¨×Ü¶½³ÁÃÔÃ¤ºĞ²»¿É×Ô°Î£©
-- Ô°ÁÖ¾°¹ÛÉè¼Æ £¨½µµÍ»ğÌÁÉı¼¶ĞèÇó£©
-- ¿ÉÓÃĞÔÉè¼Æ £¨×°ÊÎÌá¹©¼Ó³É£©
+Support Chinese and English!
+
+\_(:Ğ·ã€âˆ )\_
+
+æ·»åŠ 4ç§åŸºçŸ³ã€‚
+- æ²™æ‹‰é£Ÿè°± ï¼ˆå¯ä»¥åƒè‰äº†ï¼ï¼‰
+- ç›²ç›®çš„èµŒå¾’ ï¼ˆæ€»ç£æ²‰è¿·ç›²ç›’ä¸å¯è‡ªæ‹”ï¼‰
+- å›­æ—æ™¯è§‚è®¾è®¡ ï¼ˆé™ä½ç«å¡˜å‡çº§éœ€æ±‚ï¼‰
+- å¯ç”¨æ€§è®¾è®¡ ï¼ˆè£…é¥°æä¾›åŠ æˆï¼‰
 
 Add 4 cornerstones.
 - Salad Recipe (Now you can eat non-ediable goods!)
@@ -26,10 +30,22 @@ Add 4 cornerstones.
 - Usability Design (Decorations provide extra buff)
 
 
-# ÆäËû Other
+# å…¶ä»– Other
 
-Î´À´¿ÉÄÜÌí¼Ó¸ü¶àÓĞÒâË¼µÄ»ùÊ¯
+æœªæ¥å¯èƒ½æ·»åŠ æ›´å¤šæœ‰æ„æ€çš„åŸºçŸ³
+
 I might add more interesting cornerstones in the future
 
-ÓĞÎÊÌâ¿ÉÒÔÇ°Íù(GitHub issue)[https://github.com/Forwindzz/ATSCustomCornerStone/issues]·´À¡¡£
-If there are any bugs or problems, please report it to (Github issue)[https://github.com/Forwindzz/ATSCustomCornerStone/issues]
+æœ‰é—®é¢˜å¯ä»¥å‰å¾€[GitHub issue](https://github.com/Forwindzz/ATSCustomCornerStone/issues)åé¦ˆã€‚
+
+If there are any bugs or problems, please report it to [Github issue](https://github.com/Forwindzz/ATSCustomCornerStone/issues)
+
+å…³äºå¦‚ä½•å¼€å‘ï¼Œå‚è€ƒï¼š
+[HowToBuild.md](https://github.com/Forwindzz/ATSCustomCornerStone/blob/main/HowToBuild.md)
+
+About developing, refer to:
+[HowToBuild.md](https://github.com/Forwindzz/ATSCustomCornerStone/blob/main/HowToBuild.md)
+
+è¿™ä¸ªModä½¿ç”¨çš„æ˜¯MITè®¸å¯è¯åè®®ã€‚
+
+This mod use MIT licence.
