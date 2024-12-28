@@ -1,4 +1,5 @@
-﻿using Eremite.Buildings;
+﻿using Eremite;
+using Eremite.Buildings;
 using Eremite.Model;
 using Eremite.Model.Effects;
 using Forwindz.Framework.Services;
@@ -6,15 +7,17 @@ using UnityEngine;
 
 namespace Forwindz.Framework.Effects
 {
-    public class HearthPopPercentEffectModel : EffectModel
+    public class NoQueenCornerstoneEffectModel : EffectModel
     {
-        public float percent = 0.0f;
+        public bool removeCornerstoneFlag = true;
 
         public override bool IsPerk => true;
 
+        public override bool IsPositive => !removeCornerstoneFlag;
+
         public override string GetAmountText()
         {
-            return this.GetPercentage(percent);
+            return removeCornerstoneFlag?"v":"x";
         }
 
         public override Sprite GetDefaultIcon()
@@ -24,24 +27,24 @@ namespace Forwindz.Framework.Effects
 
         public override Color GetTypeColor()
         {
-            return Settings.RewardColorBuildingProduction;
+            return MB.Settings.RewardColorNegativeResolveEffect;
         }
 
         public override bool HasImpactOn(BuildingModel building)
         {
-            return building is HearthModel;
+            return false;
         }
 
         public override void OnApply(EffectContextType contextType, string contextModel, int contextId)
         {
-            CustomServiceManager.GetService<IDynamicHearthService>().AddHearthRequirePopPercent(percent);
+            IDynamicCornerstoneService service = CustomServiceManager.GetService<IDynamicCornerstoneService>();
+            service.SetNoCornerstone(removeCornerstoneFlag);
         }
 
         public override void OnRemove(EffectContextType contextType, string contextModel, int contextId)
         {
-            CustomServiceManager.GetService<IDynamicHearthService>().AddHearthRequirePopPercent(-percent);
+            IDynamicCornerstoneService service = CustomServiceManager.GetService<IDynamicCornerstoneService>();
+            service.SetNoCornerstone(!removeCornerstoneFlag);
         }
-
-        public override bool IsPositive => percent >= 0.0f;
     }
 }

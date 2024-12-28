@@ -22,7 +22,7 @@ namespace Forwindz.Framework.Effects
 
         public override Sprite GetDefaultIcon()
         {
-            throw null;
+            return overrideIcon;
         }
 
         public override Color GetTypeColor()

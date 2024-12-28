@@ -25,7 +25,7 @@ namespace Forwindz.Framework.Effects
 
         public override Sprite GetDefaultIcon()
         {
-            return trader?.icon;
+            return trader?.icon ?? overrideIcon;
         }
 
         public override Color GetTypeColor()

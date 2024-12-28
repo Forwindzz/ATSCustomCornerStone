@@ -35,7 +35,7 @@ namespace Forwindz.Framework.Effects
 
         public override Sprite GetDefaultIcon()
         {
-            return good?.icon;
+            return good?.icon ?? overrideIcon;
         }
 
         public override Color GetTypeColor()

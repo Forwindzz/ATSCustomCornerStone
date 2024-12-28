@@ -34,6 +34,23 @@ for row in sheet.iter_rows(min_row=2, max_col=sheet.max_column, max_row=sheet.ma
         if v is not None:
             contents[langName][localizationName]=v
 
+print("Extra sheet ----- ")
+
+sheet = workbook['基石-额外语言信息']
+for row in sheet.iter_rows(min_row=2, max_col=sheet.max_column, max_row=sheet.max_row): 
+    programName = row[0].value
+    print(programName,"----------------------")
+    for i,cell in enumerate(row):
+        if i==0:
+            continue
+        langIndex = i-1
+        langName = langs[langIndex]
+        v = cell.value
+        print(i," > ",langName,programName, v)
+        if v is not None:
+            contents[langName][programName]=v
+
+
 for lang in langs:
     filePath = os.path.join("../Assets/lang/","%s.json"%lang)
     with open(filePath,"w",encoding="utf-8") as f:

@@ -37,7 +37,7 @@ namespace Forwindz.Framework.Utils
                         foreach (KeyValuePair<string, string> entry in data)
                         {
                             LocalizationManager.AddString(entry.Key, entry.Value, languageCode);
-                            Log.Info($"{languageCode} [{entry.Key}]:{entry.Value}");
+                            //Log.Info($"{languageCode} [{entry.Key}]:{entry.Value}");
                         }
                         Log.Info($"Load {data.Count} entries for {languageCode} language, from {filePath}");
                     }

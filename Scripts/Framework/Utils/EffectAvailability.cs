@@ -18,12 +18,15 @@ namespace Forwindz.Framework.Utils
         }
 
         public static List<IEffectBuilder> RegularCornerstones = new List<IEffectBuilder>();
+        private static List<IEffectBuilder> AlreadyAddedCornerstones = new List<IEffectBuilder>();
 
         private static void SetAvailableBasedOnRarity(List<IEffectBuilder> effectModelBuilders)
         {
             Settings settings = SO.Settings;
             BiomeModel[] biomes = settings.biomes;
             HashSet<EffectsTable> usedEffectTables = new HashSet<EffectsTable>();
+            //FLog.Info($"--- Cornerstones to be added to effect table: {effectModelBuilders.Count}");
+            AlreadyAddedCornerstones.AddRange(RegularCornerstones);
             foreach (BiomeModel biome in biomes)
             {
                 //FLog.Info($"--- Process {biome.Name}");
@@ -37,7 +40,7 @@ namespace Forwindz.Framework.Utils
                     EffectsTable effectsTable = seasonRewardModel.effectsTable;
                     if (usedEffectTables.Contains(effectsTable)) //already added? (different years may use same referenced object)
                     {
-                        //FLog.Info("Already added!");
+                        //FLog.Info("  Already added!");
                         continue;
                     }
                     usedEffectTables.Add(effectsTable);
@@ -81,6 +84,7 @@ namespace Forwindz.Framework.Utils
 
                 }
             }
+            RegularCornerstones.Clear();
         }
 
 

@@ -21,6 +21,17 @@ namespace Forwindz.Framework.Utils
             return effect;
         }
 
+        public static T CreateEffect<T>(CompositeEffectBuilder builder) where T : EffectModel
+        {
+            T effect = ScriptableObject.CreateInstance<T>();
+            effect.description = builder.Model.description;
+            effect.displayName = builder.Model.displayName;
+            effect.label = builder.Model.label;
+            effect.blockedBy = Array.Empty<EffectModel>();
+            effect.usabilityTags = Array.Empty<ModelTag>();
+            return effect;
+        }
+
 
         /// <summary>
         /// 

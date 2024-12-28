@@ -4,12 +4,20 @@ using Eremite.Model;
 using Eremite.Model.Effects;
 using Eremite.Model.Effects.Hooked;
 using Forwindz.Framework.Utils;
-using TextArgType = Eremite.Model.Effects.Hooked.TextArgType;
+
 using HarmonyLib;
 using Forwindz.Framework.Hooks;
 using static Eremite.Model.Effects.HookedStateTextArg;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using Forwindz.Framework.Effects;
+using UnityEngine;
+using Eremite.Model.ViewsConfigurations;
+using Eremite;
+
+using HookedTextArgType = Eremite.Model.Effects.Hooked.TextArgType;
+using CompositeTextArgType = Eremite.Model.Effects.TextArgType;
 
 namespace Forwindz.Content
 {
@@ -89,6 +97,42 @@ namespace Forwindz.Content
             CreateFoolhardyGambler();
             CreateGardenDesign();
             CreateUsabilityDesign();
+            CreateOverdraftTechnicalContract();
+        }
+
+
+        private static void CreateOverdraftTechnicalContract()
+        {
+            CompositeEffectBuilder compositeBuilder = CreateBaseCompositeEffect(
+                "OverdraftTechnicalContract",
+                "OverdraftTechnicalContract.jpeg", //TODO: replace
+                EffectRarity.Legendary);
+
+            var noCornerstoneEffect = EffectFactoryExtend.CreateEffect<NoQueenCornerstoneEffectModel>(compositeBuilder);
+            noCornerstoneEffect.removeCornerstoneFlag = true;
+
+            var extraPickEffect = EffectFactoryExtend.CreateEffect<MultiCurrentCornerstonePickEffectModel>(compositeBuilder);
+            extraPickEffect.restrictYears = [2, 4, 6];
+            extraPickEffect.times = 2;
+            CornerstonesViewConfiguration defaultCornerstoneViewConfig = MB.Settings.GetCornerstonesViewConfiguration("Cornerstones View Default");
+            extraPickEffect.viewConfiguration = ScriptableObject.CreateInstance<CornerstonesViewConfiguration>();
+            extraPickEffect.viewConfiguration.npcDialogue = new LocaText();
+            extraPickEffect.viewConfiguration.npcDialogue.key = "OverdraftTechnicalContract_npcDialogue";
+            extraPickEffect.viewConfiguration.npcName = defaultCornerstoneViewConfig.npcName;
+            extraPickEffect.viewConfiguration.npcIcon = defaultCornerstoneViewConfig.npcIcon;
+            compositeBuilder.AddEffects(
+                [
+                    noCornerstoneEffect,
+                    extraPickEffect
+                ]
+                );
+
+            compositeBuilder.SetNestedAmountIndex(1);
+            compositeBuilder.SetDescriptionArgs(
+                [
+                    (CompositeTextArgType.Amount, 1)
+                ]
+                );
         }
 
         private static void CreateSaladRecipe()
@@ -133,9 +177,9 @@ namespace Forwindz.Content
                     0.15f
                     ));
             builder.SetDescriptionArgs(
-                (SourceType.InstantEffect, TextArgType.Amount, 0),
-                (SourceType.InstantEffect, TextArgType.Amount, 1),
-                (SourceType.InstantEffect, TextArgType.Amount, 2)
+                (SourceType.InstantEffect, HookedTextArgType.Amount, 0),
+                (SourceType.InstantEffect, HookedTextArgType.Amount, 1),
+                (SourceType.InstantEffect, HookedTextArgType.Amount, 2)
                 );
         }
 
@@ -163,9 +207,9 @@ namespace Forwindz.Content
                     1.0f
                 ));
             builder.SetDescriptionArgs(
-                (SourceType.InstantEffect, TextArgType.Amount, 0),
-                (SourceType.InstantEffect, TextArgType.Amount, 1),
-                (SourceType.InstantEffect, TextArgType.Amount, 2)
+                (SourceType.InstantEffect, HookedTextArgType.Amount, 0),
+                (SourceType.InstantEffect, HookedTextArgType.Amount, 1),
+                (SourceType.InstantEffect, HookedTextArgType.Amount, 2)
                 );
         }
 
@@ -198,8 +242,8 @@ namespace Forwindz.Content
             comfortBuilder.AddHookedEffect(
                 EffectFactoryExtend.AddHookedEffect_HarvestingRateEffectModel(comfortBuilder, BASE_VALUE)
                 );
-            comfortBuilder.SetNestedAmount(SourceType.HookedEffect, TextArgType.Amount, 0);
-            comfortBuilder.SetDescriptionArgs([(SourceType.HookedEffect, TextArgType.Amount, 0)]);
+            comfortBuilder.SetNestedAmount(SourceType.HookedEffect, HookedTextArgType.Amount, 0);
+            comfortBuilder.SetDescriptionArgs([(SourceType.HookedEffect, HookedTextArgType.Amount, 0)]);
             HookedEffectAddPreviewKey(comfortBuilder);
             comfortBuilder.SetPreviewDescriptionArgs(hookArg0);
             HookedEffectAddRetroactiveKey(comfortBuilder);
@@ -221,8 +265,8 @@ namespace Forwindz.Content
                     VillagerSpeedRewardType.Global,
                     BASE_VALUE)
                 );
-            aestheticsBuilder.SetNestedAmount(SourceType.HookedEffect, TextArgType.Amount, 0);
-            aestheticsBuilder.SetDescriptionArgs([(SourceType.HookedEffect, TextArgType.Amount, 0)]);
+            aestheticsBuilder.SetNestedAmount(SourceType.HookedEffect, HookedTextArgType.Amount, 0);
+            aestheticsBuilder.SetDescriptionArgs([(SourceType.HookedEffect, HookedTextArgType.Amount, 0)]);
             HookedEffectAddPreviewKey(aestheticsBuilder);
             aestheticsBuilder.SetPreviewDescriptionArgs(hookArg0);
             HookedEffectAddRetroactiveKey(aestheticsBuilder);
@@ -243,11 +287,11 @@ namespace Forwindz.Content
                 );
             harmonyBuilder.SetDescriptionArgs(
                 [
-                    (SourceType.Hook, TextArgType.Amount, 0),
+                    (SourceType.Hook, HookedTextArgType.Amount, 0),
                 ]
                 );
-            harmonyBuilder.SetNestedAmount(SourceType.HookedEffect, TextArgType.Amount, 0);
-            harmonyBuilder.SetDescriptionArgs([(SourceType.HookedEffect, TextArgType.Amount, 0)]);
+            harmonyBuilder.SetNestedAmount(SourceType.HookedEffect, HookedTextArgType.Amount, 0);
+            harmonyBuilder.SetDescriptionArgs([(SourceType.HookedEffect, HookedTextArgType.Amount, 0)]);
             HookedEffectAddPreviewKey(harmonyBuilder);
             harmonyBuilder.SetPreviewDescriptionArgs(hookArg0);
             HookedEffectAddRetroactiveKey(harmonyBuilder);
@@ -261,7 +305,7 @@ namespace Forwindz.Content
 
             compositeBuilder.SetDescriptionArgs(
                 [
-                    (Eremite.Model.Effects.TextArgType.Amount, 0)
+                    (CompositeTextArgType.Amount, 0)
                 ]
                 );
             compositeBuilder.SetShowEffectAsPerks(true);
