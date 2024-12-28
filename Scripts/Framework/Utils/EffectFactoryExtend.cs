@@ -4,8 +4,6 @@ using Eremite.Model.Effects;
 using Eremite.Model.Trade;
 using Forwindz.Framework.Effects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace Forwindz.Framework.Utils
@@ -30,6 +28,11 @@ namespace Forwindz.Framework.Utils
             effect.blockedBy = Array.Empty<EffectModel>();
             effect.usabilityTags = Array.Empty<ModelTag>();
             return effect;
+        }
+
+        public static T CreateEffect<T>(HookedEffectBuilder builder) where T : EffectModel
+        {
+            return EffectFactory.NewHookedEffect<T>(builder);
         }
 
 

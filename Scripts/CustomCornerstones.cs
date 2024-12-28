@@ -10,7 +10,6 @@ using Forwindz.Framework.Hooks;
 using static Eremite.Model.Effects.HookedStateTextArg;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using Forwindz.Framework.Effects;
 using UnityEngine;
 using Eremite.Model.ViewsConfigurations;
@@ -18,11 +17,13 @@ using Eremite;
 
 using HookedTextArgType = Eremite.Model.Effects.Hooked.TextArgType;
 using CompositeTextArgType = Eremite.Model.Effects.TextArgType;
+using Eremite.Services;
 
 namespace Forwindz.Content
 {
     internal class CustomCornerstones
     {
+        public const HookedStateTextSource DirectFloatPercent = (HookedStateTextSource)2333;
         static CustomCornerstones()
         {
             PatchesManager.RegPatch<CustomCornerstones>();
@@ -103,7 +104,32 @@ namespace Forwindz.Content
 
         private static void CreateAmberFluctuation()
         {
-            //TODO:...
+            HookedEffectBuilder builder = CreateBaseHookEffect(
+                "AmberFluctuation",
+                "AmberFluctuation.jpeg", //TODO: change
+                EffectRarity.Epic
+                );
+            SeasonChangeHook seasonChangeHook = new SeasonChangeHook();
+            seasonChangeHook.anySeason = true;
+            seasonChangeHook.removeAfterSeasonEnds = false;
+            builder.AddHook(seasonChangeHook);
+
+            GoodPriceFluctuationEffectModel priceEffect =
+                EffectFactoryExtend.CreateEffect<GoodPriceFluctuationEffectModel>(builder);
+            priceEffect.goodName = GoodsTypes.Valuable_Amber.ToName();
+            priceEffect.range = new Vector2(-0.14f, 0.15f);
+            builder.AddHookedEffect(priceEffect);
+
+            builder.SetDescriptionArgs(
+                [
+                (SourceType.HookedEffect, HookedTextArgType.Amount, 0)
+                ]
+            );
+            HookedEffectAddPreviewKey(builder);
+            builder.SetPreviewDescriptionArgs(
+                [
+                (DirectFloatPercent, 0)
+                ]);
         }
 
         private static void CreateOverdraftTechnicalContract()
@@ -371,6 +397,26 @@ namespace Forwindz.Content
                         footnotes.Add(footnote);
                 }
                 __result = footnotes.Join(null, "\n");
+                return false;
+            }
+            return true;
+        }
+
+        [HarmonyPatch(
+            typeof(HookedStateTextArg),
+            nameof(HookedStateTextArg.GetArg))]
+        [HarmonyPrefix]
+        private static bool HookedStateTextArg_GetArg_PrePatch(
+            HookedStateTextArg __instance,
+            HookedEffectModel effect, 
+            HookedEffectState state,
+            ref string __result)
+        {
+            if(__instance.source==DirectFloatPercent)
+            {
+                __result = Serviceable.TextsService.GetPercentage(
+                    (int)(effect.hookedEffects[__instance.sourceIndex].GetFloatAmount()*100.0f),
+                    true, true);
                 return false;
             }
             return true;

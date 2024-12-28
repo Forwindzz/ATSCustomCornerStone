@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Eremite;
 using Eremite.Model;
 using Eremite.Services;
 using Forwindz.Framework.Utils;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace Forwindz.Framework.Services
 {
@@ -281,6 +283,63 @@ namespace Forwindz.Framework.Services
         }
     }
 
+    [Serializable]
+    public class FluctuationInfo
+    {
+        [JsonProperty]
+        public Vector2 range;
+        [JsonProperty]
+        private float totalValue = 0.0f;
+        [JsonIgnore]
+        public float TotalValue => totalValue;
+        [JsonProperty]
+        private int triggerTimes = 0;
+        [JsonIgnore]
+        public float TriggerTimes => triggerTimes; 
+        [JsonProperty]
+        private string goodName;
+        [JsonIgnore]
+        public string GoodName => goodName;
+
+        [JsonIgnore]
+        private GoodModel goodModel;
+        [JsonIgnore]
+        public GoodModel GoodModel => goodModel;
+
+        public FluctuationInfo(Vector2 range, string goodName)
+        {
+            this.range = range;
+            this.goodName = goodName;
+            goodModel = MB.Settings.GetGood(goodName);
+        }
+
+        public void Restore()
+        {
+            goodModel = MB.Settings.GetGood(goodName);
+        }
+
+        public void TriggerEffect(int times=1)
+        {
+            float deltaValue = 0.0f;
+            for(int i=0;i<times;i++)
+            {
+                deltaValue += range.Random();
+            }
+            totalValue+= deltaValue;
+            triggerTimes += times;
+            SO.EffectsService.GrantTraderSellPriceRate(goodName, deltaValue);
+            FLog.Info($"Trigger Fluctuation: {goodName} | Range={range} | {times} times | Change Delta = {deltaValue}");
+        }
+
+        public void RemoveEffect()
+        {
+            FLog.Info($"Remove Fluctuation: {goodName} | Range={range} | {triggerTimes} times | Total Change = {totalValue}");
+            SO.EffectsService.GrantTraderSellPriceRate(goodName, -totalValue);
+            totalValue = 0.0f;
+            triggerTimes = 0;
+        }
+    }
+
     public class ModifyGoodTypeStatesTracker
     {
         /// <summary>
@@ -288,6 +347,64 @@ namespace Forwindz.Framework.Services
         /// </summary>
         [JsonProperty]
         private Dictionary<string,ModifyGoodTypeInfo> duplicateTracker = new();
+        [JsonProperty]
+        // [goodName][range.GetHashCode()] = FluctuationInfo
+        private Dictionary<string, Dictionary<int,FluctuationInfo>> fluctuationInfo = new();
+
+        public void AddFluctuationDefine(string goodName, Vector2 range)
+        {
+            if(!fluctuationInfo.TryGetValue(goodName,out Dictionary<int, FluctuationInfo> infoDict))
+            {
+                infoDict = fluctuationInfo[goodName] = new();
+            }
+            int hashCode = range.GetHashCode();
+            if(!infoDict.TryGetValue(hashCode, out FluctuationInfo info))
+            {
+                info = new FluctuationInfo(range,goodName);
+                infoDict[hashCode] = info;
+            }
+        }
+
+        public void TriggerFluctuation(string goodName, Vector2 range, int times=1)
+        {
+            if (!fluctuationInfo.TryGetValue(goodName, out Dictionary<int, FluctuationInfo> infoDict))
+            {
+                infoDict = fluctuationInfo[goodName] = new();
+            }
+            int hashCode = range.GetHashCode();
+            if (!infoDict.TryGetValue(hashCode, out FluctuationInfo info))
+            {
+                info = new FluctuationInfo(range, goodName);
+                infoDict[hashCode] = info;
+            }
+            info.TriggerEffect(times);
+        }
+
+        public void RemoveFluctuationDefine(string goodName, Vector2 range)
+        {
+            if (fluctuationInfo.TryGetValue(goodName, out Dictionary<int, FluctuationInfo> infoDict))
+            {
+                int hashCode = range.GetHashCode();
+                if (infoDict.TryGetValue(hashCode, out FluctuationInfo info))
+                {
+                    info.RemoveEffect();
+                    infoDict.Remove(hashCode);
+                }
+            }
+        }
+
+        public float GetFluctuation(string goodName, Vector2 range)
+        {
+            if (fluctuationInfo.TryGetValue(goodName, out Dictionary<int, FluctuationInfo> infoDict))
+            {
+                int hashCode = range.GetHashCode();
+                if (infoDict.TryGetValue(hashCode, out FluctuationInfo info))
+                {
+                    return info.TotalValue;
+                }
+            }
+            return 0.0f;
+        }
 
         public ModifyGoodTypeInfo GetExistingInfo(ModifyGoodTypeInfo info)
         {
@@ -463,6 +580,23 @@ namespace Forwindz.Framework.Services
                     ModifyGoodTypeState.GenRemoveTag(tagName)
                 ));
             RecomputeCache();
+        }
+
+        public void AddGoodPriceFluctuationDefine(string goodName, Vector2 range)
+        {
+            modifyGoodState.AddFluctuationDefine(goodName, range);
+        }
+        public void TriggerGoodPriceFluctuation(string goodName, Vector2 range, int times = 1)
+        {
+            modifyGoodState.TriggerFluctuation(goodName, range, times);
+        }
+        public void RemoveGoodPriceFluctuationDefine(string goodName, Vector2 range)
+        {
+            modifyGoodState.RemoveFluctuationDefine(goodName, range);
+        }
+        public float GetGoodPriceFluctuation(string goodName, Vector2 range)
+        {
+            return modifyGoodState.GetFluctuation(goodName, range);
         }
 
     }

@@ -22,7 +22,6 @@ namespace Forwindz.Framework.Hooks
 
         public override void AddHandle(DecorationTracker tracker)
         {
-            //TODO: install hooks
             var buildingMonitorService = CustomServiceManager.GetService<BuildingMonitorService>();
             tracker.handle.Add(
                 buildingMonitorService.OnBuildingConstructionFinished.Subscribe(new Action<Building>(tracker.OnAddBuilding))

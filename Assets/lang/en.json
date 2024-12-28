@@ -21,5 +21,8 @@
     "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_retroactive": "Expect: {0} double production chance",
     "Forwindz.CustomCornerstones_OverdraftTechnicalContract_displayName": "Overdraft Technical Contract",
     "Forwindz.CustomCornerstones_OverdraftTechnicalContract_description": "The other Viceroys agreed to give up their cornerstone quota for this year. You will get additional legendary cornerstone selections {0} times, and there will be no more cornerstone selection rewards at the beginning of each year.",
+    "Forwindz.CustomCornerstones_AmberFluctuation_displayName": "Amber Fluctuation",
+    "Forwindz.CustomCornerstones_AmberFluctuation_description": "At the beginning of each season, the selling value of amber will fluctuate {0}",
+    "Forwindz.CustomCornerstones_AmberFluctuation_preview": "Total Fluctuation: {0}",
     "OverdraftTechnicalContract_npcDialogue": "This is the cornerstone quota transferred to you by other Viceroys. As the price of the contract, the cornerstone quota of this settlement will be transferred to other governors in the future."
 }
