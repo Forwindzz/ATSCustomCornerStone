@@ -1,14 +1,18 @@
-﻿using Eremite.Buildings;
+﻿using ATS_API.Effects;
+using ATS_API.Helpers;
+using Eremite.Buildings;
 using Eremite.Model.Effects;
 using Forwindz.Framework.Utils;
+using System.Xml.Linq;
+using System;
 using UnityEngine;
 
 namespace Forwindz.Framework.Hooks
 {
     public class BuildingCompletedHook : HookLogic
     {
-        [NewCustomEnum]
-        public static readonly HookLogicType EnumBuildingComplete;
+        public static readonly HookLogicType EnumBuildingComplete = 
+            GUIDManager.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "EnumBuildingComplete");
 
         [Min(0f)]
         public int amount = 1;
@@ -16,10 +20,6 @@ namespace Forwindz.Framework.Hooks
         public bool ignoreRoads = true;
 
         public override HookLogicType Type => EnumBuildingComplete;
-        static BuildingCompletedHook()
-        {
-            CustomIntEnumManager<HookLogicType>.ScanAndAssignEnumValues<BuildingCompletedHook>();
-        }
 
         public override bool CanBeDrawn()
         {

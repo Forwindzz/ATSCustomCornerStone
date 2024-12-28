@@ -1,4 +1,5 @@
-﻿using Eremite.Buildings;
+﻿using ATS_API.Helpers;
+using Eremite.Buildings;
 using Eremite.Model.Effects;
 using Forwindz.Framework.Utils;
 using System;
@@ -9,8 +10,8 @@ namespace Forwindz.Framework.Hooks
 {
     public class DecorationHook : HookLogic
     {
-        [NewCustomEnum]
-        public static readonly HookLogicType EnumDecorationPoints;
+        public static readonly HookLogicType EnumDecorationPoints =
+            GUIDManager.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "EnumDecorationPoints");
 
         public override HookLogicType Type => EnumDecorationPoints;
 
@@ -21,11 +22,6 @@ namespace Forwindz.Framework.Hooks
 
         public DecorationTier decorationTier;
         public int amount;
-
-        static DecorationHook()
-        {
-            CustomIntEnumManager<HookLogicType>.ScanAndAssignEnumValues<DecorationHook>();
-        }
 
         public override string GetAmountText()
         {

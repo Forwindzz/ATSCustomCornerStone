@@ -1,4 +1,5 @@
-﻿using Eremite.Buildings;
+﻿using ATS_API.Effects;
+using Eremite.Buildings;
 using Eremite.Controller.Effects;
 using Eremite.Model.Effects;
 using Forwindz.Framework.Services;
@@ -6,7 +7,6 @@ using Forwindz.Scripts.Framework.Services;
 using Forwindz.Scripts.Framework.Utils;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UniRx;
 
 namespace Forwindz.Framework.Hooks
@@ -15,7 +15,8 @@ namespace Forwindz.Framework.Hooks
     {
         static DecorationMonitor()
         {
-            CustomHookedEffectsController.Register<DecorationMonitor>(DecorationHook.EnumDecorationPoints);
+            CustomHookedEffectManager.NewHookLogic<DecorationHook>(
+                DecorationHook.EnumDecorationPoints, new DecorationMonitor());
         }
 
 

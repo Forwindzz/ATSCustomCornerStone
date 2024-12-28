@@ -98,8 +98,13 @@ namespace Forwindz.Content
             CreateGardenDesign();
             CreateUsabilityDesign();
             CreateOverdraftTechnicalContract();
+            CreateAmberFluctuation();
         }
 
+        private static void CreateAmberFluctuation()
+        {
+            //TODO:...
+        }
 
         private static void CreateOverdraftTechnicalContract()
         {

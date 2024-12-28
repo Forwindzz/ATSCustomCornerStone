@@ -1,4 +1,5 @@
-﻿using Eremite.Buildings;
+﻿using ATS_API.Effects;
+using Eremite.Buildings;
 using Eremite.Controller.Effects;
 using Eremite.Model.Effects;
 using Forwindz.Framework.Services;
@@ -12,7 +13,8 @@ namespace Forwindz.Framework.Hooks
     {
         static BuildingCompletedMonitor()
         {
-            CustomHookedEffectsController.Register<BuildingCompletedMonitor>(BuildingCompletedHook.EnumBuildingComplete);
+            CustomHookedEffectManager.NewHookLogic<BuildingCompletedHook>(
+                BuildingCompletedHook.EnumBuildingComplete, new BuildingCompletedMonitor());
         }
 
         public override void AddHandle(BuildingCompletedTracker tracker)
