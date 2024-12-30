@@ -1,6 +1,8 @@
 .vs
+.vscode
 obj/
 bin/
 Assembly-CSharp.dll
 DesignGeneration/input/*.*
 Directory.Build.props
+Build/
