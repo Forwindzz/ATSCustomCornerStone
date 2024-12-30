@@ -5,29 +5,27 @@
 
 A customized cornerstone mod, by f⑨ (Forwindzz)
 
-设计上倾向修改机制，或者一些有意思的玩法。
-强度可能偏高，但是应该能比得过10琥珀！
-
-The design tends to modify the game mechanism, or some interesting gameplay.
-It might a bit unbalance (a bit strong), But at least worther than 10 ambers!
-
 支持中文和英文！
 
 Support Chinese and English!
 
 \_(:з」∠)\_
 
-添加4种基石。
-- 沙拉食谱 （可以吃草了！）
-- 盲目的赌徒 （总督沉迷盲盒不可自拔）
+添加6种基石。
+- 沙拉食谱 （可以生啃小麦了！）
+- 盲目的赌徒 （可以免费开盲盒）
 - 园林景观设计 （降低火塘升级需求）
 - 可用性设计 （装饰提供加成）
+- 预支技术协议 （提前拿橙色基石，那么代价是什么？）
+- 市场波动 （通过琥珀价差套利）
 
-Add 4 cornerstones.
+Add 6 cornerstones.
 - Salad Recipe (Now you can eat non-ediable goods!)
-- Foolhardy Gambler (We need more blind boxes)
+- Foolhardy Gambler (Open free blind boxes)
 - Garden Design (Reduce hearth upgrade requirement)
 - Usability Design (Decorations provide extra buff)
+- Overdraft Technical Contract (More Legendary conerstones, at a cost of ...)
+- Volatile Market (Spread Arbitrage for ambers)
 
 
 # 其他 Other
@@ -45,7 +43,3 @@ If there are any bugs or problems, please report it to [Github issue](https://gi
 
 About developing, refer to:
 [HowToBuild.md](https://github.com/Forwindzz/ATSCustomCornerStone/blob/main/HowToBuild.md)
-
-这个Mod使用的是MIT许可证协议。
-
-This mod use MIT licence.

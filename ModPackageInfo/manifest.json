@@ -1,10 +1,10 @@
 {
   "name": "ForwindzCustomCornerstones",
-  "version_number": "1.0.0",
+  "version_number": "1.1.0",
   "website_url": "https://github.com/Forwindzz/ATSCustomCornerStone",
   "description": "Add some customized cornerstones, focus on new mechanics. 添加了一些基石，注重添加新机制。by f⑨",
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100",
-    "ATS_API_Devs-API-3.1.0"
+    "ATS_API_Devs-API-3.3.0"
   ]
 }
