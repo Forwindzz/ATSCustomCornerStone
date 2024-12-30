@@ -23,7 +23,7 @@ namespace Forwindz.Content
 {
     internal class CustomCornerstones
     {
-        public const HookedStateTextSource DirectFloatPercent = (HookedStateTextSource)2333;
+        public static HookedStateTextSource DirectFloatPercent = GUIDManagerExtend.Get<HookedStateTextSource>(PluginInfo.PLUGIN_GUID, "DirectFloatPercent");
         static CustomCornerstones()
         {
             PatchesManager.RegPatch<CustomCornerstones>();
@@ -99,29 +99,33 @@ namespace Forwindz.Content
             CreateGardenDesign();
             CreateUsabilityDesign();
             CreateOverdraftTechnicalContract();
-            CreateAmberFluctuation();
+            CreateVolatileMarket();
         }
 
-        private static void CreateAmberFluctuation()
+        private static void CreateVolatileMarket()
         {
             HookedEffectBuilder builder = CreateBaseHookEffect(
-                "AmberFluctuation",
-                "AmberFluctuation.jpeg", //TODO: change
+                "VolatileMarket",
+                "VolatileMarket.jpeg", //TODO: change
                 EffectRarity.Epic
                 );
-            SeasonChangeHook seasonChangeHook = new SeasonChangeHook();
-            seasonChangeHook.anySeason = true;
-            seasonChangeHook.removeAfterSeasonEnds = false;
-            builder.AddHook(seasonChangeHook);
+            builder.SetDrawLimit(1);
+
+            TradeDealHook tradeDealHook = new TradeDealHook();
+            tradeDealHook.amount = 1;
+            tradeDealHook.valueType = TradeDealHook.ValueType.SellValue;
+            tradeDealHook.judgeType = TradeDealHook.JudgeType.Higher;
+            builder.AddHook(tradeDealHook);
 
             GoodPriceFluctuationEffectModel priceEffect =
                 EffectFactoryExtend.CreateEffect<GoodPriceFluctuationEffectModel>(builder);
             priceEffect.goodName = GoodsTypes.Valuable_Amber.ToName();
-            priceEffect.range = new Vector2(-0.14f, 0.15f);
+            priceEffect.range = new Vector2(-0.6f, 0.6f);
             builder.AddHookedEffect(priceEffect);
 
             builder.SetDescriptionArgs(
                 [
+                (SourceType.Hook, HookedTextArgType.Amount, 0),
                 (SourceType.HookedEffect, HookedTextArgType.Amount, 0)
                 ]
             );
@@ -225,20 +229,18 @@ namespace Forwindz.Content
             builder.AddInstantEffect(
                 EffectFactoryExtend.AddHookedEffect_HearthPopPercentEffectModel(
                     builder,
-                    -0.9f
+                    -1.0f
                 ));
             builder.AddInstantEffect(
                 EffectFactoryExtend.AddHookedEffect_DecorationPercentEffectModel(
                     builder,
                     1.0f
                 ));
-            builder.AddInstantEffect(
-                EffectFactoryExtend.AddHookedEffect_VillagersBreakTimeRateEffectModel(
-                    builder,
-                    1.0f
-                ));
+            BonusHearthRangeEffectModel hearthRangeEffect = EffectFactoryExtend.CreateEffect<BonusHearthRangeEffectModel>(builder);
+            hearthRangeEffect.amount = -2;
+            builder.AddInstantEffect(hearthRangeEffect);
             builder.SetDescriptionArgs(
-                (SourceType.InstantEffect, HookedTextArgType.Amount, 0),
+                //(SourceType.InstantEffect, HookedTextArgType.Amount, 0),
                 (SourceType.InstantEffect, HookedTextArgType.Amount, 1),
                 (SourceType.InstantEffect, HookedTextArgType.Amount, 2)
                 );
@@ -251,7 +253,6 @@ namespace Forwindz.Content
                 "UsabilityDesign",
                 "UsabilityDesign.jpeg",
                 EffectRarity.Epic);
-
             // for all sub effect
             HookedStateTextArg hookArg0 = new HookedStateTextArg()
             {

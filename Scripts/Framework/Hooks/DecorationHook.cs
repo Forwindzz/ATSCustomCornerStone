@@ -1,17 +1,13 @@
-﻿using ATS_API.Helpers;
-using Eremite.Buildings;
+﻿using Eremite.Buildings;
 using Eremite.Model.Effects;
 using Forwindz.Framework.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Forwindz.Framework.Hooks
 {
     public class DecorationHook : HookLogic
     {
         public static readonly HookLogicType EnumDecorationPoints =
-            GUIDManager.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "EnumDecorationPoints");
+            GUIDManagerExtend.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "EnumDecorationPoints");
 
         public override HookLogicType Type => EnumDecorationPoints;
 
@@ -38,6 +34,9 @@ namespace Forwindz.Framework.Hooks
             return false;
         }
 
-
+        public override bool CanBeDrawn()
+        {
+            return true;//consider check decoration building
+        }
     }
 }

@@ -4,7 +4,7 @@
     "Forwindz.CustomCornerstones_FoolhardyGambler_displayName": "Foolhardy Gambler",
     "Forwindz.CustomCornerstones_FoolhardyGambler_description": "Only {0} will arrive to your settlement now, and arrive {1} quicker. Each perk or blueprint sold by {0} has {2} chance to become free",
     "Forwindz.CustomCornerstones_GardenDesign_displayName": "Garden Design",
-    "Forwindz.CustomCornerstones_GardenDesign_description": "Reduce {0} required villagers for upgrading hearths, all decorative buildings provide extra {1} decoration point. However, the villagers' rest time increase {2}.",
+    "Forwindz.CustomCornerstones_GardenDesign_description": "Villagers are no longer required for hearth upgrades, all decorative buildings provide extra {0} decoration point. However, the hearth range {1}.",
     "Forwindz.CustomCornerstones_UsabilityDesign_displayName": "Usability Design",
     "Forwindz.CustomCornerstones_UsabilityDesign_description": "Each point of Harmony, Aesthetics, and Comfort decoration will provide {0} double production chance, movement speed, and harvest speed respectively.",
     "Forwindz.CustomCornerstones_UsabilityDesign_Comfort_displayName": "Usability Design - Comfort",
@@ -21,8 +21,8 @@
     "Forwindz.CustomCornerstones_UsabilityDesign_Harmony_retroactive": "Expect: {0} double production chance",
     "Forwindz.CustomCornerstones_OverdraftTechnicalContract_displayName": "Overdraft Technical Contract",
     "Forwindz.CustomCornerstones_OverdraftTechnicalContract_description": "The other Viceroys agreed to give up their cornerstone quota for this year. You will get additional legendary cornerstone selections {0} times, and there will be no more cornerstone selection rewards at the beginning of each year.",
-    "Forwindz.CustomCornerstones_AmberFluctuation_displayName": "Amber Fluctuation",
-    "Forwindz.CustomCornerstones_AmberFluctuation_description": "At the beginning of each season, the selling value of amber will fluctuate {0}",
-    "Forwindz.CustomCornerstones_AmberFluctuation_preview": "Total Fluctuation: {0}",
+    "Forwindz.CustomCornerstones_VolatileMarket_displayName": "Volatile Market",
+    "Forwindz.CustomCornerstones_VolatileMarket_description": "Whenever a merchant trade is completed with at least {0} amber's worth, the amber's value fluctuates {1}.",
+    "Forwindz.CustomCornerstones_VolatileMarket_preview": "Total Fluctuation: {0}",
     "OverdraftTechnicalContract_npcDialogue": "This is the cornerstone quota transferred to you by other Viceroys. As the price of the contract, the cornerstone quota of this settlement will be transferred to other governors in the future."
 }

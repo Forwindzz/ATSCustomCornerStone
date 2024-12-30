@@ -323,7 +323,11 @@ namespace Forwindz.Framework.Services
             float deltaValue = 0.0f;
             for(int i=0;i<times;i++)
             {
-                deltaValue += range.Random();
+                deltaValue += StableRNG.StableRandom(range);
+                if (totalValue + deltaValue < -1.0f) //lowerest: -100%, this is capped by intend
+                {
+                    deltaValue = -(totalValue + 1.0f);
+                }
             }
             totalValue+= deltaValue;
             triggerTimes += times;

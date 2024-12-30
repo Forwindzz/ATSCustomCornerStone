@@ -7,7 +7,8 @@ namespace Forwindz.Framework.Services
 {
     internal class DynamicCornerstoneState
     {
-        public bool noCornerstone = false;
+        // if stack>0, yearly cornerstone is banned
+        public int noYearlyCornerstone = 0;
     }
 
     public class DynamicCornerstoneService : GameService, IDynamicCornerstoneService, IService
@@ -41,12 +42,12 @@ namespace Forwindz.Framework.Services
 
         public void SetNoCornerstone(bool v)
         {
-            state.noCornerstone = v;
+            state.noYearlyCornerstone += v ? 1 : -1;
         }
 
         public bool GetNoCornerstone()
         {
-            return state.noCornerstone;
+            return state.noYearlyCornerstone > 0;
         }
 
         #region patch
@@ -61,7 +62,7 @@ namespace Forwindz.Framework.Services
             {
                 return true;
             }
-            if(service.state.noCornerstone)
+            if(service.GetNoCornerstone())
             {
                 //FLog.Info("Cancel yearly cornerstone reward!");
                 return false;

@@ -39,7 +39,7 @@ namespace ForwindzCustomPerks.Framework.Services
 
         public DynamicTraderExtraState GetTraderGlobalEffects(string traderName)
         {
-            if(!traderGlobalStates.TryGetValue(traderName, out DynamicTraderExtraState extraState))
+            if (!traderGlobalStates.TryGetValue(traderName, out DynamicTraderExtraState extraState))
             {
                 FLog.Info($"[{traderName}] does not have extra states, create it");
                 extraState = new DynamicTraderExtraState();
@@ -50,7 +50,7 @@ namespace ForwindzCustomPerks.Framework.Services
 
         public bool GetEffectModifiedSellValue(string effectName, out float modifiedValue)
         {
-            if(effectsSellValue.TryGetValue(effectName, out modifiedValue))
+            if (effectsSellValue.TryGetValue(effectName, out modifiedValue))
             {
                 return true;
             }
@@ -63,6 +63,13 @@ namespace ForwindzCustomPerks.Framework.Services
 
     }
 
+    public class TradeDealInfo
+    {
+        public TraderVisitState visit;
+        public TradingOffer villageOffer;
+        public TradingOffer traderOffer;
+    }
+
     public class DynamicTraderInfoService : GameService, IDynamicTraderInfoService, IService
     {
         [ModSerializedField]
@@ -70,6 +77,8 @@ namespace ForwindzCustomPerks.Framework.Services
         private IDisposable traderArriveListener = null;
 
         public DynamicTraderInfoData DynamicTraderState => stateData;
+        public Subject<TradeDealInfo> onTradeCompleteSubject = new();
+        public IObservable<TradeDealInfo> OnTradeCompleteEvent => onTradeCompleteSubject;
 
         private MethodInfo methodUpdateNextVisit = null;
 
@@ -88,10 +97,10 @@ namespace ForwindzCustomPerks.Framework.Services
                 CustomServiceManager.GetAsIService<IExtraStateService>()
             };
         }
-        
+
         public void UpdateNextVisit()
         {
-            if(methodUpdateNextVisit==null)
+            if (methodUpdateNextVisit == null)
             {
                 FLog.Error("Cannot invoke UpdateNextVisit()! The trader state cannot be update!");
                 return;
@@ -136,7 +145,7 @@ namespace ForwindzCustomPerks.Framework.Services
             DynamicTraderExtraState dynExtraState = stateData.GetTraderGlobalEffects(newVisitState.trader);
 
             // check free cornerstone
-            if (dynExtraState.chanceToFreeEffect > 0.0f) 
+            if (dynExtraState.chanceToFreeEffect > 0.0f)
             {
                 FLog.Info($"{newVisitState.trader} has {dynExtraState.chanceToFreeEffect} free chance.");
                 foreach (var effectPair in newVisitState.effects)
@@ -147,7 +156,7 @@ namespace ForwindzCustomPerks.Framework.Services
                     if (!alreadyBought)
                     {
                         FLog.Info($"{dynExtraState.chanceToFreeEffect} free chance for {effectPair}");
-                        if (RNG.Roll(dynExtraState.chanceToFreeEffect))
+                        if (StableRNG.StableRoll(dynExtraState.chanceToFreeEffect))
                         {
                             stateData.effectsSellValue.Add(effectName, 0.0f);
                             FLog.Info($"Set {effectName} as free");
@@ -155,7 +164,7 @@ namespace ForwindzCustomPerks.Framework.Services
                     }
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -173,7 +182,7 @@ namespace ForwindzCustomPerks.Framework.Services
                 string traderName = stateData.forceTraderNameList
                     .Where(x => !StateService.Trade.assaultedTraders.Contains(x))
                     .FirstOrDefault();
-                if (traderName == null || traderName.Length == 0) 
+                if (traderName == null || traderName.Length == 0)
                 {
                     return null;
                 }
@@ -200,7 +209,7 @@ namespace ForwindzCustomPerks.Framework.Services
         /// <param name="name"></param>
         public void RemoveForceTrader(string name)
         {
-            if(!stateData.forceTraderNameList.Remove(name))
+            if (!stateData.forceTraderNameList.Remove(name))
             {
                 FLog.Warning("Cannot remove forced trader [" + name + "]. It not exists in forced list!");
             }
@@ -219,7 +228,7 @@ namespace ForwindzCustomPerks.Framework.Services
 
         public void ResetNextTrader()
         {
-            if(Serviceable.TradeService.IsMainTraderInTheVillage())
+            if (Serviceable.TradeService.IsMainTraderInTheVillage())
             {
                 // if the merchant already arrive, do not reset the visit state
                 // it will automatically reset after the merchant depart
@@ -228,16 +237,16 @@ namespace ForwindzCustomPerks.Framework.Services
             FLog.Info($"Reset Next Trader");
             float travelStartTime = -1;
             bool hasOldtravel = false;
-            if(Serviceable.StateService.Trade.visit!=null)
+            if (Serviceable.StateService.Trade.visit != null)
             {
                 hasOldtravel = true;
                 travelStartTime = Serviceable.StateService.Trade.visit.travelStartTime;
             }
             Serviceable.StateService.Trade.visit = null;
             UpdateNextVisit();
-            if(Serviceable.StateService.Trade.visit != null)
+            if (Serviceable.StateService.Trade.visit != null)
             {
-                if(hasOldtravel)
+                if (hasOldtravel)
                 {
                     // keep the travel start time, so that the arrival progress will not be reset
                     Serviceable.StateService.Trade.visit.travelStartTime = travelStartTime;
@@ -266,7 +275,7 @@ namespace ForwindzCustomPerks.Framework.Services
         [HarmonyPrefix]
         private static bool TradeService_UpdateNextVisit_PrePatch(TradeService __instance)
         {
-            if(__instance.State.visit != null)
+            if (__instance.State.visit != null)
             {
                 return true;
             }
@@ -282,59 +291,52 @@ namespace ForwindzCustomPerks.Framework.Services
             }
             return true;
         }
-        /*
-        [HarmonyPatch(typeof(Eremite.Services.TradeService), nameof(Eremite.Services.TradeService.CreateVisit))]
-        [HarmonyPostfix]
-        private static void TradeService_CreateVisit_PostPatch(TradeService __instance, ref TraderVisitState __result, TraderModel trader, int sourceId)
-        {
-            //CustomServiceManager.GetService<DynamicTraderInfoService>().CreateExtraSellEffectsInformation(__result);
-        }*/
-        /*
-        /// <summary>
-        /// Process buy cornerstone/effects behavior
-        /// </summary>
-        /// <param name="__instance"></param>
-        /// <param name="effect"></param>
-        /// <returns></returns>
-        [HarmonyPatch(typeof(Eremite.Services.TradeService), nameof(Eremite.Services.TradeService.RemoveCurrencyFor))]
-        [HarmonyPrefix]
-        private static bool TradeService_RemoveCurrencyFor_PrePatch(TradeService __instance, EffectModel effect)
-        {
-            DynamicTraderInfoService service = CustomServiceManager.GetService<DynamicTraderInfoService>();
-            if (service.stateData.GetEffectModifiedSellValue(effect.Name, out float modifiedValue))
-            {
-                if(modifiedValue>0) // if it is not free, pay it!
-                {
-                    // pay with modified value
-                    Serviceable.StorageService.Remove(
-                        service.PriceToCurrency(Serviceable.TradeService.GetValueInCurrency(effect)),
-                        StorageOperationType.Trade);
-                }
-                return true;
-            }
-            return false;
-        }*/
 
         [HarmonyPatch(
-            typeof(Eremite.Services.TradeService), 
+            typeof(Eremite.Services.TradeService),
             nameof(Eremite.Services.TradeService.GetValueInCurrency),
-            new Type[] { typeof(EffectModel)})]
+            new Type[] { typeof(EffectModel) })]
         [HarmonyPostfix]
         private static void TradeService_GetValueInCurrency_Effect_PostPatch(
-            TradeService __instance, 
+            TradeService __instance,
             ref float __result,
             EffectModel effect)
         {
             DynamicTraderInfoService service = CustomServiceManager.GetService<DynamicTraderInfoService>();
             if (service.stateData.GetEffectModifiedSellValue(effect.name, out float modifiedValue))
             {
-                if(effect.tradingBuyValue!=0)
+                if (effect.tradingBuyValue != 0)
                 {
                     float finalValue = __result * modifiedValue / effect.tradingBuyValue;
                     FLog.Info($"Change effect price from {__result} to {finalValue}");
                     __result = finalValue;
                 }
             }
+        }
+
+        [HarmonyPatch(
+            typeof(Eremite.Services.TradeService), 
+            nameof(Eremite.Services.TradeService.CompleteTrade),
+            [
+                typeof(TraderVisitState),
+                typeof(TradingOffer),
+                typeof(TradingOffer),
+                ])]
+        [HarmonyPostfix]
+        private static void TradeService_CompleteTrade_PostPatch(
+            TradeService __instance,
+            TraderVisitState visit, TradingOffer villageOffer, TradingOffer traderOffer
+            )
+        {
+            DynamicTraderInfoService service = CustomServiceManager.GetService<DynamicTraderInfoService>();
+            TradeDealInfo info = new()
+            {
+                visit = visit,
+                villageOffer = villageOffer,
+                traderOffer = traderOffer
+            };
+            service.onTradeCompleteSubject.OnNext( info );
+            
         }
         #endregion
     }
