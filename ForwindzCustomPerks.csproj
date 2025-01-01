@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ForwindzCustomPerksMod</AssemblyName>
     <Description>My First Mod for Against The Storm - by Forwindz</Description>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   <DebugType>Full</DebugType>
@@ -367,6 +367,10 @@
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Scripts\Framework\Hooks\Base\" />
+  </ItemGroup>
 
   <Target Name="Deploy" AfterTargets="Build">
 		<ItemGroup>
@@ -383,10 +387,10 @@
     <Copy SourceFiles="@(MetaFile)" DestinationFolder="$(BepInExPath)\BepInEx\plugins\Forwindz-ForwindzCustomCornerstones\" />
 	  
     <!-- Build the package-->
-    <Delete Files="Build\$(Version)\**\*.*"/>
-    <Copy SourceFiles="@(Assembly)" DestinationFolder="Build\$(Version)\"/>
-    <Copy SourceFiles="@(MetaFile)" DestinationFolder="Build\$(Version)\"/>
-    <Copy SourceFiles="@(Assets)" DestinationFolder="Build\$(Version)\plugins\assets\%(RecursiveDir)"/>
+    <Delete Files="Build\$(Version)\**\*.*" />
+    <Copy SourceFiles="@(Assembly)" DestinationFolder="Build\$(Version)\" />
+    <Copy SourceFiles="@(MetaFile)" DestinationFolder="Build\$(Version)\" />
+    <Copy SourceFiles="@(Assets)" DestinationFolder="Build\$(Version)\plugins\assets\%(RecursiveDir)" />
     <Exec Command="powershell Compress-Archive -Force -Path Build\$(Version)\* -DestinationPath &quot;Build\ForwindzCustomCornerstones.zip&quot;" />
     <Exec Command="powershell Compress-Archive -Force -Path Build\$(Version)\* -DestinationPath &quot;Build\Forwindz-ForwindzCustomCornerstones-$(Version).zip&quot;" />
     

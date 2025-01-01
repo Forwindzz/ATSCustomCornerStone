@@ -19,7 +19,7 @@ namespace Forwindz
     {
         public const string PLUGIN_GUID= "Forwindz.CustomCornerstones";
         public const string PLUGIN_NAME = "f9's cornerstones";
-        public const string PLUGIN_VERSION = "1.1.0";
+        public const string PLUGIN_VERSION = "1.2.0";
     }
 
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]

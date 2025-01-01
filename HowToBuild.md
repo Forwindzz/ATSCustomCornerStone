@@ -43,14 +43,20 @@ It is not recommend to use my mod as a library, please suggest the API to add co
 
 Code Aspect:
 - Custom Save system
-- Custom Hook Monitor system
-- Custom service system
-- Custom `CompositeEffectBuilder`
-- Custom effects (may break compatibility, if other mods also modify this)
-	- Modify `GoodModel.eatable` value
-	- Modify Trader cornerstone price (with lots of patch)
-	- Modify Hearth upgrade requirement
-	- Modify Decoration points.
+- Custom Service system
+- Custom Availability for conerstone
+
+Compatibility information: 
+This mod may break compatibility, 
+
+- **Set Operation**: directly set the value: `=` `Set()`. This will break compatibility if other mod also set this value
+    - Modify `GoodModel.eatable` value
+	- Modify Trader cornerstone price 
+
+- **Relative**: modify based on the existing value: `+=` `-=` `*=` `/=` `Add()` `Remove()`). This will break compatibility if other mod use set to change the value. But it could be compatitable if they use relative method to update the value.
+	- Modify Hearth upgrade requirement 
+	- Modify `DecorationModel`: Decoration points 
+    - Modify `RelicModel`: Tier effects 
 
 Also you may encounter some meaningless code, the project are based on this repository:
 (Shush's First ATS mod)[https://github.com/Shushishtok/AtS-my-first-mod]

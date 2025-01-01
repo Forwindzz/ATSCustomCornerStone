@@ -1,4 +1,21 @@
 
+# 1.2.0
+
+Added 2 types of cornerstones
+- Delay insurance (Glade events expire for compensation)
+- Adsorbent (Blood Flower no longer smell bad)
+
+Balance
+- Fine-tuned the random generator so that the correction for low-probability events is no longer too high
+
+
+添加2种基石
+- 延期保险（事件过期会有补偿）
+- 吸附剂（血花不再难闻了）
+
+平衡性
+- 微调了随机数的运作方式，使其对于小概率事件的补正不再过高
+
 # 1.1.0
 
 Add Two conerstone:
