@@ -26,8 +26,13 @@ namespace Forwindz.Framework.Utils.Extend
 
         public static T[] ForceRemove<T>(this T[] source, T item)
         {
-            int index = Array.IndexOf(source, item);
-            if (index < 0) return source;
+            return source.ForceRemove(Array.IndexOf(source, item));
+        }
+
+        public static T[] ForceRemove<T>(this T[] source, int index)
+        {
+            if (index < 0) 
+                return source;
             T[] result = new T[source.Length - 1];
             if (index > 0)
                 Array.Copy(source, 0, result, 0, index);

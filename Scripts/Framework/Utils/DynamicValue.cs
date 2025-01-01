@@ -1,7 +1,9 @@
 ﻿using Eremite.Services.World;
+using Forwindz.Framework.Utils.Extend;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -9,7 +11,15 @@ using UnityEngine;
 
 namespace Forwindz.Framework.Utils
 {
-    public class DynamicValueFloat
+
+    public interface IDynamicValue<T>
+    {
+        public T BaseValue { get; }
+        public T CurrentValue { get; set; }
+        public void RestoreOriginalValue();
+    }
+
+    public class DynamicValueFloat : IDynamicValue<float>
     {
         private readonly float baseValue;
         private float cacheValue;
@@ -45,7 +55,7 @@ namespace Forwindz.Framework.Utils
         }
     }
 
-    public class DynamicValueInt
+    public class DynamicValueInt : IDynamicValue<int>
     {
         private readonly int baseValue;
         private int cacheValue;
@@ -78,6 +88,44 @@ namespace Forwindz.Framework.Utils
         {
             adder(baseValue - getter());
             cacheValue = baseValue;
+        }
+    }
+
+    public class DynamicValueArray<T> : IDynamicValue<T[]>
+    {
+        private readonly T[] baseValue;
+        // the real value, it might be changed by other mods
+        private readonly Func<T[]> getter;
+        // += operation
+        private readonly Action<T[]> setter;
+
+        // original value
+        public T[] BaseValue => baseValue;
+        // in my mod the current value is ...
+        public T[] CurrentValue { get => this.getter(); set => setter(value); }
+        // this is the actual value, are impacted by all mods.
+        public T[] RealValue => getter();
+
+        public DynamicValueArray(Func<T[]> getter, Action<T[]> setter)
+        {
+            this.getter = getter;
+            this.setter = setter;
+            baseValue = this.getter();
+        }
+
+        public void AddNewValue(T newValue)
+        {
+            setter(getter().ForceAdd(newValue));
+        }
+
+        public void Remove(int index)
+        {
+            setter(getter().ForceRemove<T>(index));
+        }
+
+        public void RestoreOriginalValue()
+        {
+            setter(baseValue);
         }
     }
 

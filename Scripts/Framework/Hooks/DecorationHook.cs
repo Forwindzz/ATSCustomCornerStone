@@ -6,10 +6,10 @@ namespace Forwindz.Framework.Hooks
 {
     public class DecorationHook : HookLogic
     {
-        public static readonly HookLogicType EnumDecorationPoints =
-            GUIDManagerExtend.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "EnumDecorationPoints");
+        public static readonly HookLogicType HookLogicTypeEnum =
+            GUIDManagerExtend.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "DecorationHook");
 
-        public override HookLogicType Type => EnumDecorationPoints;
+        public override HookLogicType Type => HookLogicTypeEnum;
 
         public override string FormatedDescription => 
             base.TryFormat(this.description.Text, decorationTier.displayName.Text, amount);

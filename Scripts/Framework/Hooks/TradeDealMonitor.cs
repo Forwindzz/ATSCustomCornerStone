@@ -12,7 +12,7 @@ namespace Forwindz.Framework.Hooks
         static TradeDealMonitor()
         {
             CustomHookedEffectManager.NewHookLogic<TradeDealHook>(
-                TradeDealHook.TradeDeal, new TradeDealMonitor());
+                TradeDealHook.HookLogicTypeEnum, new TradeDealMonitor());
         }
 
         public override void AddHandle(TradeDealTracker tracker)

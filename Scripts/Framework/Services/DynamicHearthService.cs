@@ -70,8 +70,6 @@ namespace Forwindz.Framework.Services
 
     public class DynamicHearthService : GameService, IDynamicHearthService, IService
     {
-
-
         [ModSerializedField]
         private DynamicHearthState state = new();
 

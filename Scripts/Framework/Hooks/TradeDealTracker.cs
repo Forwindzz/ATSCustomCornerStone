@@ -10,7 +10,6 @@ namespace Forwindz.Framework.Hooks
     {
         public TradeDealTracker(HookState hookState, TradeDealHook model, HookedEffectModel effectModel, HookedEffectState effectState) : base(hookState, model, effectModel, effectState)
         {
-
         }
 
         public void UpdateDealInfo(TraderVisitState visit, TradingOffer villageOffer, TradingOffer traderOffer)

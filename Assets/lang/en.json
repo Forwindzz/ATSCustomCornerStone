@@ -24,5 +24,10 @@
     "Forwindz.CustomCornerstones_VolatileMarket_displayName": "Volatile Market",
     "Forwindz.CustomCornerstones_VolatileMarket_description": "Whenever a merchant trade is completed with at least {0} amber's worth, the amber's value fluctuates {1}.",
     "Forwindz.CustomCornerstones_VolatileMarket_preview": "Total Fluctuation: {0}",
-    "OverdraftTechnicalContract_npcDialogue": "This is the cornerstone quota transferred to you by other Viceroys. As the price of the contract, the cornerstone quota of this settlement will be transferred to other governors in the future."
+    "Forwindz.CustomCornerstones_DelayInsurance_displayName": "Delay Insurance",
+    "Forwindz.CustomCornerstones_DelayInsurance_description": "Whenever a dangerous or forbidden glade event expires, you will receive all good rewards from the left-side decision reward.",
+    "Forwindz.CustomCornerstones_Adsorbent_displayName": "Adsorbent",
+    "Forwindz.CustomCornerstones_Adsorbent_description": "These tiny obsidian-like granules draw foul odors unto themselves, purifying the air. {0} no longer reduce resolve, processing {0} speed {1}",
+    "OverdraftTechnicalContract_npcDialogue": "This is the cornerstone quota transferred to you by other Viceroys. As the price of the contract, the cornerstone quota of this settlement will be transferred to other governors in the future.",
+    "ObtainRelicRewardEffectModel_Info_Bonus": "receive {1} compensation due to {0} expired"
 }

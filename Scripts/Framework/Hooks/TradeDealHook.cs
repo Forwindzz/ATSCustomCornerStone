@@ -7,9 +7,9 @@ namespace Forwindz.Framework.Hooks
 {
     public class TradeDealHook : HookLogic
     {
-        public static readonly HookLogicType TradeDeal =
+        public static readonly HookLogicType HookLogicTypeEnum =
             GUIDManagerExtend.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "TradeDeal");
-        public override HookLogicType Type => TradeDeal;
+        public override HookLogicType Type => HookLogicTypeEnum;
 
         public float amount;
         public ValueType valueType = ValueType.SellValue;

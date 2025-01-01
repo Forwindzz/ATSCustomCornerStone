@@ -18,6 +18,7 @@ using Eremite;
 using HookedTextArgType = Eremite.Model.Effects.Hooked.TextArgType;
 using CompositeTextArgType = Eremite.Model.Effects.TextArgType;
 using Eremite.Services;
+using System;
 
 namespace Forwindz.Content
 {
@@ -100,6 +101,88 @@ namespace Forwindz.Content
             CreateUsabilityDesign();
             CreateOverdraftTechnicalContract();
             CreateVolatileMarket();
+            CreateAdsorbent();
+            CreateDelayInsurance();
+        }
+
+        private static void CreateDelayInsurance()
+        {
+            HookedEffectBuilder builder = CreateBaseHookEffect(
+                "DelayInsurance",
+                "DelayInsurance.png", //TODO: change
+                EffectRarity.Legendary
+                );
+            
+            RelicExpireHook expireDangerousHook = new RelicExpireHook();
+            expireDangerousHook.amount = 1;
+            expireDangerousHook.dangerLevel = Eremite.Buildings.DangerLevel.Dangerous;
+            expireDangerousHook.expireTierLeast = 1;
+            expireDangerousHook.expireLoopLeast = 1;
+
+            RelicExpireHook expireForbiddenHook = new RelicExpireHook();
+            expireForbiddenHook.amount = 1;
+            expireForbiddenHook.dangerLevel = Eremite.Buildings.DangerLevel.Forbidden;
+            expireForbiddenHook.expireTierLeast = 1;
+            expireForbiddenHook.expireLoopLeast = 1;
+
+            ObtainRelicRewardEffectModel obtainRelicRewardEffect = EffectFactoryExtend.CreateEffect<ObtainRelicRewardEffectModel>();
+            obtainRelicRewardEffect.filterType = ObtainRelicRewardEffectModel.FilterType.Goods;
+            obtainRelicRewardEffect.decisionIndex = 0;
+            obtainRelicRewardEffect.getExtraChance = 0;
+
+            builder.AddHook(expireDangerousHook);
+            builder.AddHook(expireForbiddenHook);
+            builder.AddHookedEffect(obtainRelicRewardEffect);
+
+            builder.SetPreviewDescriptionKey("Effect_StatePreview_Generic_Gained");
+            builder.SetPreviewDescriptionArgs([
+                (HookedStateTextSource.TotalGainIntFromHooked, 0)
+                ]);
+        }
+
+        private static void CreateAdsorbent()
+        {
+            CompositeEffectBuilder builder = CreateBaseCompositeEffect(
+                "Adsorbent",
+                "Adsorbent.png", //TODO: change
+                EffectRarity.Epic
+                );
+            builder.SetDrawLimit(1);
+            
+            //blood flower
+            ModifyRelicExpireEffectModel modifyBloodFlowerExpireEffect = EffectFactoryExtend.CreateEffect<ModifyRelicExpireEffectModel>();
+            modifyBloodFlowerExpireEffect.relicName = ATS_API.Helpers.RelicTypes.Blightrot.ToName();
+            modifyBloodFlowerExpireEffect.tierIndex = 1;
+            modifyBloodFlowerExpireEffect.effectName = ATS_API.Helpers.EffectTypes.Blightrot_Resolve.ToName();
+            modifyBloodFlowerExpireEffect.operation = Framework.Services.RelicArrayOperation.Remove;
+
+            RelicProcessingSpeedEffectModel bloodFlowerProcessSpeedEffect = EffectFactoryExtend.CreateEffect<RelicProcessingSpeedEffectModel>();
+            bloodFlowerProcessSpeedEffect.relicName = ATS_API.Helpers.RelicTypes.Blightrot.ToName();
+            bloodFlowerProcessSpeedEffect.amount = 1.0f;
+            
+            //blood flower clone
+            ModifyRelicExpireEffectModel modifyBloodFlowerCloneExpireEffect = EffectFactoryExtend.CreateEffect<ModifyRelicExpireEffectModel>();
+            modifyBloodFlowerCloneExpireEffect.relicName = ATS_API.Helpers.RelicTypes.Blightrot_Clone.ToName();
+            modifyBloodFlowerCloneExpireEffect.tierIndex = 1;
+            modifyBloodFlowerCloneExpireEffect.effectName = ATS_API.Helpers.EffectTypes.Blightrot_Resolve.ToName();
+            modifyBloodFlowerCloneExpireEffect.operation = Framework.Services.RelicArrayOperation.Remove;
+
+            RelicProcessingSpeedEffectModel bloodFlowerCloneProcessSpeedEffect = EffectFactoryExtend.CreateEffect<RelicProcessingSpeedEffectModel>();
+            bloodFlowerCloneProcessSpeedEffect.relicName = ATS_API.Helpers.RelicTypes.Blightrot_Clone.ToName();
+            bloodFlowerCloneProcessSpeedEffect.amount = 1.0f;
+
+            builder.AddEffects([
+                modifyBloodFlowerExpireEffect,
+                bloodFlowerProcessSpeedEffect,
+                modifyBloodFlowerCloneExpireEffect,
+                bloodFlowerCloneProcessSpeedEffect
+            ]);
+
+            builder.SetDescriptionArgs(
+                [
+                (CompositeTextArgType.Amount,0),
+                (CompositeTextArgType.Amount,1),
+                ]);
         }
 
         private static void CreateVolatileMarket()

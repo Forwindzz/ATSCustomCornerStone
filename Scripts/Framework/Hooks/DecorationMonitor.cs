@@ -16,7 +16,7 @@ namespace Forwindz.Framework.Hooks
         static DecorationMonitor()
         {
             CustomHookedEffectManager.NewHookLogic<DecorationHook>(
-                DecorationHook.EnumDecorationPoints, new DecorationMonitor());
+                DecorationHook.HookLogicTypeEnum, new DecorationMonitor());
         }
 
 

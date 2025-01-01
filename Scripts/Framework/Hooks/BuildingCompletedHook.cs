@@ -11,15 +11,15 @@ namespace Forwindz.Framework.Hooks
 {
     public class BuildingCompletedHook : HookLogic
     {
-        public static readonly HookLogicType EnumBuildingComplete = 
-            GUIDManager.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "EnumBuildingComplete");
+        public static readonly HookLogicType HookLogicTypeEnum = 
+            GUIDManager.Get<HookLogicType>(PluginInfo.PLUGIN_GUID, "BuildingCompletedHook");
 
         [Min(0f)]
         public int amount = 1;
         public bool ignoreDecorationBuildings = true;
         public bool ignoreRoads = true;
 
-        public override HookLogicType Type => EnumBuildingComplete;
+        public override HookLogicType Type => HookLogicTypeEnum;
 
         public override bool CanBeDrawn()
         {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using BepInEx;
 using BepInEx.Logging;
@@ -14,106 +16,117 @@ namespace Forwindz.Framework.Utils
     {
         public static ManualLogSource logger = BepInEx.Logging.Logger.CreateLogSource("f9");
 
-        public static void Debug(params object[] objs)
+        public static void Debug(object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogDebug(objs);
+            logger.LogDebug(ProcessMetaInfo(memberName, filePath, lineNumber) + obj);
         }
 
-        public static void Debug(object obj)
+        public static void Info(object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogDebug(obj);
+            logger.LogInfo(ProcessMetaInfo(memberName, filePath, lineNumber) + obj);
         }
 
-        public static void Info(params object[] objs)
+        public static void Warning(object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogInfo(objs);
+            logger.LogWarning(ProcessMetaInfo(memberName, filePath, lineNumber) + obj);
         }
 
-        public static void Info(object obj)
+        public static void Error(
+            object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogInfo(obj);
+            logger.LogError(ProcessMetaInfo(memberName, filePath, lineNumber) + obj);
         }
 
-        public static void Warning(params object[] objs)
+        public static void ErrorAndThrow(object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogWarning(objs);
-        }
-
-        public static void Warning(object obj)
-        {
-            logger.LogWarning(obj);
-        }
-
-        public static void Error(params object[] objs)
-        {
-            logger.LogError(objs);
-        }
-
-        public static void Error(object obj)
-        {
-            logger.LogError(obj);
-        }
-
-        public static void ErrorAndThrow(object obj)
-        {
-            logger.LogError(obj);
+            logger.LogError(ProcessMetaInfo(memberName, filePath, lineNumber) + obj);
             throw new Exception("Throw Exception:" + obj.ToString());
         }
 
-        public static void Fatal(params object[] objs)
+        public static void Fatal(
+            object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogFatal(objs);
+            logger.LogFatal(ProcessMetaInfo(memberName, filePath, lineNumber) + obj);
         }
 
-        public static void Fatal(object obj)
+        public static void FatalAndThrow(object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogFatal(obj);
-        }
-
-        public static void FatalAndThrow(object obj)
-        {
-            logger.LogFatal(obj);
+            logger.LogFatal(ProcessMetaInfo(memberName, filePath, lineNumber) + obj);
             throw new Exception("Throw Exception:" + obj.ToString());
         }
 
-        public static void Message(params object[] objs)
+        public static void Message(object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
-            logger.LogMessage(objs);
+            logger.LogMessage(ProcessMetaInfo(memberName, filePath, lineNumber)+obj);
         }
 
-        public static void Message(object obj)
-        {
-            logger.LogMessage(obj);
-        }
-
-        public static void Assert(bool result, object message)
+        public static void Assert(bool result, object message,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
             if(!result)
             {
-                logger.LogError("Assert failed!");
+                logger.LogError($"{ProcessMetaInfo(memberName, filePath, lineNumber)}Assert failed!");
                 logger.LogError(message);
                 throw new Exception("Assert Failed :" + message.ToString());
             }
         }
 
-        public static void AssertNotNull<T>(T obj) where T : class
+        public static void AssertNotNull<T>(T obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0) where T : class
         {
-            if (obj == null) 
+            if (obj == null)
             {
-                logger.LogError($"Not null Assert failed! {typeof(T).FullName}");
+                logger.LogError($"{ProcessMetaInfo(memberName, filePath, lineNumber)}Not null Assert failed! {typeof(T).FullName}");
                 throw new Exception($"Not null Assert Failed for {typeof(T).FullName}");
             }
         }
 
-        public static void AssertType<T>(object obj)
+        public static void AssertType<T>(object obj,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
         {
             if (!obj.GetType().Equals(typeof(T)))
             {
-                logger.LogError($"Type Assert failed! Get <{obj.GetType().FullName}> Expect <{typeof(T).FullName}>");
+                logger.LogError($"{ProcessMetaInfo(memberName, filePath, lineNumber)} Type Assert failed! Get <{obj.GetType().FullName}> Expect <{typeof(T).FullName}>");
                 string info = obj?.ToString();
                 if(info==null) info = "null";
                 throw new Exception("Type Assert Failed :" + info);
             }
+        }
+
+        private static string ProcessMetaInfo(
+            string memberName, string filePath, int lineNumber)
+        {
+            return $"[@{Path.GetFileNameWithoutExtension(filePath)}.{memberName}:{lineNumber}] ";
         }
     }
 }

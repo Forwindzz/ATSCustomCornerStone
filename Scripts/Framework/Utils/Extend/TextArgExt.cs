@@ -1,6 +1,6 @@
 ﻿using Eremite.Model.Effects;
 
-namespace ForwindzCustomPerks.Scripts.Framework.Utils.Extend
+namespace Forwindz.Framework.Utils.Extend
 {
     public static class TextArgExt
     {

@@ -14,7 +14,7 @@ namespace Forwindz.Framework.Hooks
         static BuildingCompletedMonitor()
         {
             CustomHookedEffectManager.NewHookLogic<BuildingCompletedHook>(
-                BuildingCompletedHook.EnumBuildingComplete, new BuildingCompletedMonitor());
+                BuildingCompletedHook.HookLogicTypeEnum, new BuildingCompletedMonitor());
         }
 
         public override void AddHandle(BuildingCompletedTracker tracker)

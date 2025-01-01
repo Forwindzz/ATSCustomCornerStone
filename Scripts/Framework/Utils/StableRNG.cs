@@ -45,6 +45,10 @@ namespace Forwindz.Framework.Utils
 
         public static bool StableRoll(float chance, float weight, bool isPositive)
         {
+            if (chance <= 0.0f)
+            {
+                return false;
+            }
             if (isPositive)
             {
                 return StableRoll(chance, weight);
@@ -53,14 +57,13 @@ namespace Forwindz.Framework.Utils
             {
                 return !StableRoll(1.0f - chance, weight);
             }
-
         }
 
         public static bool StableRoll(float chance, float weight = 1.0f)
         {
             float bonusChance = Mathf.Max(expectChance - hitCount - tolerateGap, 0.0f) +
-                Mathf.Max(unluckyBonusRatio * (feelUnlucky - tolerateUnluckyGap), 0.0f);
-            bool result = RNG.Roll(bonusChance + chance);
+                Mathf.Max(unluckyBonusRatio * (feelUnlucky - tolerateUnluckyGap), 0.0f) + 1.0f;
+            bool result = RNG.Roll(bonusChance * chance);
             if (result)
             {
                 hitCount += weight;
@@ -76,7 +79,7 @@ namespace Forwindz.Framework.Utils
                 feelUnlucky += weight * unluckyTimes; // feel unlucky, it negative many times, then feel extremely unlucky 
             }
             expectChance += chance * weight;
-            FLog.Info($"RNG Roll: {chance * 100.0f:F2}% + {bonusChance * 100.0f:F2}% | Exp: {(expectChance - hitCount) * 100.0f:F2}% | Unlucky: {feelUnlucky:F3}, Times: {unluckyTimes:F3}");
+            FLog.Info($"RNG Roll: {chance * 100.0f:F2}% * {bonusChance * 100.0f:F2}% | Exp: {(expectChance - hitCount) * 100.0f:F2}% | Unlucky: {feelUnlucky:F3}, Times: {unluckyTimes:F3}");
             return result;
         }
 
@@ -84,7 +87,7 @@ namespace Forwindz.Framework.Utils
         {
             float bonusChance = Mathf.Max(expectChance - hitCount - tolerateGap, 0.0f) +
                 Mathf.Max(unluckyBonusRatio * (feelUnlucky - tolerateUnluckyGap), 0.0f);
-            float rngResult = Mathf.Min(RNG.Float(0.0f, 1.0f) + RNG.Float(0.0f, bonusChance), 1.0f);
+            float rngResult = Mathf.Min(RNG.Float(0.0f, 1.0f) * (1.0f + RNG.Float(0.0f, bonusChance)), 1.0f);
             float value = (range.y - range.x) * rngResult + range.x;
 
 
@@ -99,6 +102,16 @@ namespace Forwindz.Framework.Utils
             FLog.Info($"RNG Range: {rngResult * 100.0f:F2}% + {bonusChance * 100.0f:F2}% | Exp: {(expectChance - hitCount) * 100.0f:F2}% | Unlucky: {feelUnlucky:F3}, Times: {unluckyTimes:F3}");
 
             return value;
+        }
+
+        public static int StableCritialTimes(float chance, float weight = 1.0f, bool higherIsPositive = true)
+        {
+            int baseCount = (int)chance;
+            if(StableRoll(chance - baseCount, weight/(baseCount+1), higherIsPositive))
+            {
+                baseCount++;
+            }
+            return baseCount;
         }
 
         private static void StableRandomAdjustState(float rngResult, float weight)
@@ -139,7 +152,7 @@ namespace Forwindz.Framework.Utils
                     lastFeelUnluckyTime = seconds;
                     return true;
                 }
-                FLog.Info($"RNG Time gap: {seconds - lastFeelUnluckyTime}, Skip");
+                //FLog.Info($"RNG Time gap: {seconds - lastFeelUnluckyTime}, Skip");
                 return false;
             }
         }
