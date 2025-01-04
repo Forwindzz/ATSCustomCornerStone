@@ -1,4 +1,13 @@
 
+# 1.2.1
+
+- Fixed the issue that the +100% decoration effect of the cornerstone **Garden Design** would increase the consumption of building materials. Now this cornerstone will not double the building cost for decoration buildings.
+- Fixed the issue from cornerstone **usability design**, when completing the glade event to trigger the effect of replacing the building, the decoration calculation was not updated in time
+
+- 修复基石**园林景观设计** +100%的装饰度效果，会导致增加建材消耗的问题。现在这个基石不会翻倍装饰建筑的建造成本。
+- 修复基石**可用性设计**的更新计算问题，在完成森林空地事件触发替换建筑的效果时，装饰计算没有及时更新的问题
+
+
 # 1.2.0
 
 Added 2 types of cornerstones

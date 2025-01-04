@@ -1,10 +1,15 @@
 ﻿using Cysharp.Threading.Tasks;
 using Eremite;
 using Eremite.Buildings;
+using Eremite.Model;
 using Eremite.Model.Orders;
+using Eremite.Model.State;
+using Eremite.Model.Trade;
 using Eremite.Services;
 using Eremite.Services.Orders;
 using Forwindz.Framework.Utils;
+using ForwindzCustomPerks.Framework.Services;
+using HarmonyLib;
 using Newtonsoft.Json;
 using Sirenix.Utilities;
 using System;
@@ -12,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UniRx;
+using UnityEngine;
 
 namespace Forwindz.Framework.Services
 {
@@ -58,7 +64,7 @@ namespace Forwindz.Framework.Services
 
         public void AddDecorationPercent(string decoName, float percent)
         {
-            if(decorationStates.TryGetValue(decoName, out DynamicDecorationStateInfo info))
+            if (decorationStates.TryGetValue(decoName, out DynamicDecorationStateInfo info))
             {
                 info.decorationPercent += percent;
             }
@@ -81,7 +87,7 @@ namespace Forwindz.Framework.Services
 
         public void ApplyStates()
         {
-            foreach(var decoName in decorationStates.Keys)
+            foreach (var decoName in decorationStates.Keys)
             {
                 ApplyDecorationState(decoName);
             }
@@ -93,6 +99,39 @@ namespace Forwindz.Framework.Services
             DecorationModelDelegate decoDelegate = originalDecorations[decoName];
             var dynamicDecorationScore = decoDelegate.decorationScoreDynamic;
             dynamicDecorationScore.SetNewValue((int)(decoDelegate.decorationScoreDynamic.BaseValue * dynamicDecoInfo.decorationPercent));
+            /*
+            float percent = dynamicDecoInfo.decorationPercent;
+            if (percent == 1.0f)
+            {
+                return;
+            }
+            if(!(GameService.ConstructionService is ConstructionService service))
+            {
+                FLog.Error($"ConstructionService is unexpected type {GameService.ConstructionService.GetType().FullName}");
+                return;
+            }
+            if(fieldConstructionCostCache==null)
+            {
+                fieldConstructionCostCache = AccessTools.Field(typeof(Dictionary<string, Good[]>), "constructionCostCache");
+                if(fieldConstructionCostCache==null)
+                {
+                    FLog.Error("Cannot find Dictionary<string, Good[]> constructionCostCache");
+                    return;
+                }
+            }
+            Dictionary<string, Good[]> cache = (Dictionary<string, Good[]>)fieldConstructionCostCache.GetValue(service);
+            percent = Mathf.Max(DynamicBuildingStateService.MIN_DECO_RATIO, percent);
+            if (!cache.TryGetValue(decoName, out Good[] goods))
+            {
+                cache[decoName] = service.GetConstructionCostFor(MB.Settings.GetBuilding(decoName));
+            }
+            
+            float ratio = 1.0f / percent;
+            for (int i = 0; i < goods.Length; i++)
+            {
+                goods[i].amount = Mathf.FloorToInt(goods[i].amount * ratio);
+            }
+            FLog.Info($"Modify {decorationModel.Name} building cost = {percent}");*/
         }
 
         public void DestoryRestore()
@@ -111,6 +150,7 @@ namespace Forwindz.Framework.Services
         private DynamicBuildingState state = new();
         private FieldInfo fieldInfo_decorationTypeOwning = null;
         private FieldInfo fieldInfo_monitor = null;
+        internal static float MIN_DECO_RATIO = 0.1f;
 
         public readonly Subject<Dictionary<string, DynamicDecorationStateInfo>> decorationValueChangeSubject = new();
         public IObservable<Dictionary<string, DynamicDecorationStateInfo>> OnDecorationValueChange => decorationValueChangeSubject;
@@ -119,6 +159,7 @@ namespace Forwindz.Framework.Services
         static DynamicBuildingStateService()
         {
             CustomServiceManager.RegGameService<DynamicBuildingStateService>();
+            PatchesManager.RegPatch<DynamicBuildingStateService>();
         }
 
         public override IService[] GetDependencies()
@@ -147,8 +188,8 @@ namespace Forwindz.Framework.Services
                 return (Dictionary<ObjectiveState, DecorationTypeOwningLogic>)(fieldInfo_decorationTypeOwning?.GetValue(monitor));
             }
         }
-            
-            
+
+
         public override UniTask OnLoading()
         {
             fieldInfo_monitor = ReflectUtils.GetDeclaredField<OrdersService>("monitor");
@@ -166,7 +207,7 @@ namespace Forwindz.Framework.Services
                 FLog.Error("Failed to get decoration orders, the decoration order info cannot be refreshed!");
                 return;
             }
-            foreach(var pair in decoOrderDict)
+            foreach (var pair in decoOrderDict)
             {
                 ObjectiveState objectiveState = pair.Key;
                 DecorationTypeOwningLogic logic = pair.Value;
@@ -212,7 +253,8 @@ namespace Forwindz.Framework.Services
         public int GetDecorationAmount(DecorationTier tier)
         {
             return BuildingsService.Decorations.Values
-                .Sum(int(Decoration d)=>{
+                .Sum(int (Decoration d) =>
+                {
                     if (d.IsFinished() && d.model.hasDecorationTier && d.model.tier == tier)
                     {
                         return d.model.decorationScore;
@@ -221,5 +263,37 @@ namespace Forwindz.Framework.Services
                     return 0;
                 });
         }
+
+        #region Patch
+        [HarmonyPatch(
+            typeof(Eremite.Services.ConstructionService),
+            nameof(Eremite.Services.ConstructionService.GetConstructionCostFor)
+            )]
+        [HarmonyPostfix]
+        private static void ConstructionService_GetConstructionCostFor_PostPatch(
+            ConstructionService __instance,
+            BuildingModel building
+            )
+        {
+            if (building is DecorationModel decorationModel)
+            {
+                DynamicBuildingStateService service = CustomServiceManager.GetService<DynamicBuildingStateService>();
+                if (service == null)
+                {
+                    FLog.Error("Service is not inited!");
+                    return;
+                }
+                float percent = service.state.GetDecorationPercent(decorationModel.Name);
+                if (percent == 1.0f)
+                {
+                    return;
+                }
+                percent = Mathf.Max(MIN_DECO_RATIO, percent);
+                float ratio = 1.0f / percent;
+                Good[] goods = building.GetRequiredGoods(__instance.GetCurrentCostsRate() * ratio);
+                //FLog.Info($"Modify {decorationModel.Name} building cost = {percent}");
+            }
+        }
+        #endregion
     }
 }

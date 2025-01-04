@@ -106,12 +106,20 @@ namespace Forwindz.Scripts.Framework.Services
             CustomServiceManager.GetService<BuildingMonitorService>().OnBuildingCompleted(__instance);
         }
 
+        [HarmonyPatch(typeof(Building), nameof(Building.MakeBuildingCompleted))]
+        [HarmonyPostfix]
+        private static void Building_MakeBuildingCompleted_Postfix(Building __instance)
+        {
+            FLog.Info($"Make building complete: {__instance.name} ||\t Category: {__instance.BuildingModel.category.name}");
+            CustomServiceManager.GetService<BuildingMonitorService>().OnBuildingCompleted(__instance);
+        }
+
         [HarmonyPatch(typeof(Building), nameof(Building.Remove))]
         [HarmonyPostfix]
         private static void Building_Remove_Postfix(Building __instance)
         {
             FLog.Info($"Building remove: {__instance.name} ||\t Category: {__instance.BuildingModel.category.name}");
-            CustomServiceManager.GetService<BuildingMonitorService>().OnBuildingCompleted(__instance);
+            CustomServiceManager.GetService<BuildingMonitorService>().OnBuildingRemoved(__instance);
         }
 
         #endregion
