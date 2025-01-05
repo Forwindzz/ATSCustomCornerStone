@@ -65,6 +65,7 @@ namespace Forwindz.Framework.Services
         [JsonProperty]
         public ExtraRelicInfo modifyInfo = new();
 
+        [JsonIgnore]
         private List<DynamicValueArray<EffectModel>> effectStep_effectsWrapper = new();
 
         public DynamicRelicModel() { }
@@ -78,6 +79,16 @@ namespace Forwindz.Framework.Services
         public void RestoreFromSave()
         {
             currentModel = MB.Settings.GetRelic(modifyInfo.relicName);
+            if(currentModel==null)
+            {
+                FLog.Error($"Cannot find relic model {modifyInfo.relicName}");
+                return;
+            }
+            if(effectStep_effectsWrapper==null)
+            {
+                FLog.Warning($"effectStep_effectsWrapper is null!");
+                effectStep_effectsWrapper = new();
+            }
             foreach (var expireEffectInfo in currentModel.effectsTiers)
             {
                 effectStep_effectsWrapper.Add(new DynamicValueArray<EffectModel>(
@@ -162,7 +173,7 @@ namespace Forwindz.Framework.Services
                     break;
             }
 
-            if(targetEffectModel==null)
+            if (targetEffectModel == null)
             {
                 FLog.Warning($"Cannot Remove expired effect {expireEffectInfo.effectName} in {modifyInfo.relicName}.effectTiers[{expireEffectInfo.tierIndex}]");
                 return;
@@ -176,8 +187,12 @@ namespace Forwindz.Framework.Services
                         (relic.state.currentDynamicEffect >= expireEffectInfo.tierIndex) || //reach this tier
                         relic.state.continuousTicks > 0 // already reach this tier, but loop back
                     ));
-
-            FLog.Info($"Find {filteredRelic.Count()} relics to be modified");
+            int count = filteredRelic.Count();
+            FLog.Info($"Find {count} relics to be modified");
+            if (count == 0)
+            {
+                return;
+            }
             switch (expireEffectInfo.operation)
             {
                 case RelicArrayOperation.Add:
@@ -225,7 +240,7 @@ namespace Forwindz.Framework.Services
             foreach (var pair in relicInfos)
             {
                 DynamicRelicModel model = pair.Value;
-                model.RestoreFromSave();
+                model.RecoverOriginalState();
             }
         }
 
@@ -273,6 +288,7 @@ namespace Forwindz.Framework.Services
         {
             return new IService[] {
                 Serviceable.BuildingsService,
+                GameServices.GladesService,
                 CustomServiceManager.GetAsIService<IExtraStateService>()
             };
         }

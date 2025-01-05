@@ -110,7 +110,9 @@ namespace Forwindz.Framework.Utils
         {
             this.getter = getter;
             this.setter = setter;
-            baseValue = this.getter();
+            T[] currentValue = this.getter();
+            baseValue = new T[currentValue.Length];
+            currentValue.CopyTo(baseValue, 0);
         }
 
         public void AddNewValue(T newValue)
