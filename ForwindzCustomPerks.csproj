@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>ForwindzCustomPerksMod</AssemblyName>
     <Description>My First Mod for Against The Storm - by Forwindz</Description>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   <DebugType>Full</DebugType>

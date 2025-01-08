@@ -292,7 +292,7 @@ namespace Forwindz.Content
                 EffectFactoryExtend.AddHookedEffect_AddTraderFreeEffectChanceEffectModel(
                     builder,
                     TraderTypes.Trader_7_Trickster.ToTraderModel(),
-                    0.15f
+                    0.25f
                     ));
             builder.SetDescriptionArgs(
                 (SourceType.InstantEffect, HookedTextArgType.Amount, 0),

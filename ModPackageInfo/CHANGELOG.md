@@ -1,4 +1,12 @@
 
+# 1.2.2
+
+Balance:
+
+**Foolhardy Gambler** 15% -> 25% free chance
+
+**盲目的赌徒** 15% -> 25% 免费概率
+
 # 1.2.1
 
 - Fixed the issue that the +100% decoration effect of the cornerstone **Garden Design** would increase the consumption of building materials. Now this cornerstone will not double the building cost for decoration buildings.
